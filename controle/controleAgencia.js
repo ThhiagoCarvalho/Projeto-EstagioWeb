@@ -76,7 +76,7 @@ module.exports = class controlAgencia {
         const data_criacao = request.body.data_criacao;
       
         const agencia = new Agencia();
-        agencia.nome = nome_fantasia;
+        agencia.nome = nome;
         agencia.orcamento = orcamento;
         agencia.localizacao = localizacao;
         agencia.data_criacao = data_abertura;

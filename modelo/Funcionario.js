@@ -14,10 +14,11 @@ module.exports = class Funcionario {
 
 
     async post_funcionario () {
+      console.log(this.nome,this.email,this.cpf,this.cargo)
         const conexao = Banco.getConexao()
         const sql = "INSERT INTO funcionarios (nome, email, cpf, cargo, salario, data_contratacao, departamento_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try { 
-            const [result] = await conexao.promise().execute(sql , [this.nome, this.email, this.cpf,this.salario,this.data_contratacao,this.departamento_id])
+            const [result] = await conexao.promise().execute(sql , [this.nome, this.email,  this.cpf, this.cargo,this.salario,this.data_contratacao,this.departamento_id])
             this._idUFuncionario = result.insertId;
             return result.affectedRows > 0;
         }catch (error) {

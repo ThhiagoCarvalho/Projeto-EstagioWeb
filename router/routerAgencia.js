@@ -14,29 +14,30 @@ module.exports = class RouterFuncionario {
     }
 
     criarRotasAgencia () { 
+        console.log("entrou agenciaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
         this._router.post ('/' ,
 
             this._middlewareAgencia.validar_nome,
-            this._middlewareAgencia.validar_email,
-            this._middlewareAgencia.validar_senha,
-            this._middlewareAgencia.validar_idade,
-            this._middlewareAgencia.validar_dataDate,
-            this._middlewareAgencia.validar_funcionario,
+            this._middlewareAgencia.validar_orcamento,
+            this._middlewareAgencia.validar_localizacao,
+            this._middlewareAgencia.validar_data_criacao,
 
             this._controleAgencia.controle_agencia_post
         )
         
 
         this._router.post ('/csv' ,
-            this._middlewareAgencia.uploadJSON,             
+            this._middlewareAgencia.uploadJSON,
             this._middlewareAgencia.validar_nome,
-            this._middlewareAgencia.validar_email,
-            this._middlewareAgencia.validar_senha,
-            this._middlewareAgencia.validar_idade,
-            this._middlewareAgencia.validar_dataDate,
+            this._middlewareAgencia.validar_orcamento,
+            this._middlewareAgencia.validar_localizacao,
+            this._middlewareAgencia.validar_data_criacao,
+
 
             this._controleAgencia.controle_csv_agencia
         )
+        return this._router; // ✅ Isso é o que estava faltando
 
     }
 

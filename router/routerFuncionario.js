@@ -8,30 +8,32 @@ module.exports = class RouterFuncionario {
     constructor () { 
         this._router = express.Router()
         this._controleFuncionario = new ControleFuncionario()
-        this._middlewareAgencia = new MiddlewareFuncionario ()
+        this._middlewareFuncionario = new MiddlewareFuncionario ()
     }
 
     criarRotasFuncionario () { 
         this._router.post ('/' ,
 
-            this._middlewareAgencia.validar_nome,
-            this._middlewareAgencia.validar_email,
-            this._middlewareAgencia.validar_senha,
-            this._middlewareAgencia.validar_idade,
-            this._middlewareAgencia.validar_dataDate,
-            this._middlewareAgencia.validar_funcionario,
+            this._middlewareFuncionario.validar_nome,
+            this._middlewareFuncionario.validar_email,
+            this._middlewareFuncionario.validar_cpf,
+            this._middlewareFuncionario.validar_cargo,
+            this._middlewareFuncionario.validar_salario,
+            this._middlewareFuncionario.validar_data_contratacao,
+            this._middlewareFuncionario.validar_departamento_id,
 
             this._controleFuncionario.controle_funcionario_post
         )
         
 
         this._router.post ('/csv' ,
-            this._middlewareAgencia.uploadJSON,             
-            this._middlewareAgencia.validar_nome,
-            this._middlewareAgencia.validar_email,
-            this._middlewareAgencia.validar_senha,
-            this._middlewareAgencia.validar_idade,
-            this._middlewareAgencia.validar_dataDate,
+            this._middlewareFuncionario.uploadJSON,             
+            this._middlewareFuncionario.validar_nome,
+            this._middlewareFuncionario.validar_email,
+            this._middlewareFuncionario.validar_cpf,
+            this._middlewareFuncionario.validar_cargo,
+            this._middlewareFuncionario.validar_salario,
+            this._middlewareFuncionario.validar_data_contratacao,
 
             this._controleFuncionario.controle_csv_funcionario
         )
@@ -39,22 +41,22 @@ module.exports = class RouterFuncionario {
         
 
         this._router.post ('/login' ,
-            this._middlewareAgencia.validar_email,
-            this._middlewareAgencia.validar_senha,
+            this._middlewareFuncionario.validar_email,
+            this._middlewareFuncionario.validar_cpf,
 
-            this._middlewareAgencia.validar_funcionario_logado,
+            this._middlewareFuncionario.validar_funcionario_logado,
             this._controleFuncionario.controle_funcionario_login
         )
 
 
-        this._router.put ('/senha' ,
-            this._middlewareAgencia.validar_email,
-            this._middlewareAgencia.validar_senha,
+        /*this._router.put ('/senha' ,
+            this._middlewareFuncionario.validar_email,
+            this._middlewareFuncionario.validar_cpf,
 
-            this._middlewareAgencia.validar_funcionario_logado,
+            this._middlewareFuncionario.validar_funcionario_logado,
             this._controleFuncionario.controle_funcionario_update
         )
-
+*/
     
         return this._router
 

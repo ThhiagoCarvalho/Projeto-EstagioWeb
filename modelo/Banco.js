@@ -4,7 +4,7 @@ class Banco {
     static HOST = '127.0.0.1';
     static USER = 'root';
     static PWD = 'root123';
-    static DB = 'sistema_gerenciamento_funcionarios';
+    static DB = 'sitema_gestao_funcionarios';
     static PORT = 3306;
     static CONEXAO = null;
 

@@ -92,6 +92,7 @@ module.exports = class controlFuncionario {
 
 
     async controle_funcionario_post(request, response) {
+      console.log(request.body)
       const nome = request.body.nome;
       const email = request.body.email;
       const cpf = request.body.cpf;
