@@ -3,7 +3,7 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { parse } = require('csv-parse/sync');
-
+const Funcionario = require('../modelo/Funcionario');
 const upload = multer({ dest: 'uploads/' });
 
 module.exports = class MiddlewareFuncionario {
@@ -19,7 +19,7 @@ module.exports = class MiddlewareFuncionario {
                         if (ext === '.json') {
                             req.body = JSON.parse(conteudo);
                         } else if (ext === '.csv') {
-                            const registros = parse(conteudo, { columns: true, skip_empty_lines: true, trim: true });
+                            const registros = parse(conteudo, { columns: true, skip_empty_lines: true, trim: true ,  delimiter: ';'});
                             req.body.funcionarios = registros;
                         } else {
                             return res.status(400).json({ msg: 'Formato de arquivo não suportado (apenas .json ou .csv)' });
@@ -53,7 +53,10 @@ module.exports = class MiddlewareFuncionario {
     validar_nome = (req, res, next) => {
         const funcionarios = this.normalizarFuncionarios(req.body);
         for (let i = 0; i < funcionarios.length; i++) {
-            const { nome } = funcionarios[i];
+            const  nome  = funcionarios[i].nome;
+                        console.log(funcionarios[i].nome)
+                        console.log(nome)
+
             if (!nome || nome.length < 3) {
                 return res.status(400).json({
                     cod: 1,
@@ -170,14 +173,36 @@ module.exports = class MiddlewareFuncionario {
                 status: false
             });
         }
+        console.log("contorle")
+
         next();
     }
 
     validar_funcionario_logado = async (req, res, next) => {
+        const id = req.params.id;
+        const funcionario = new Funcionario();
+        funcionario.id = id;
+        const resultado = await funcionario.verificarExistencia();
+        if (resultado) {
+            next();
+        } else {
+            return res.status(400).json({
+                msg: "Este funcionário não está cadastrado!",
+                status: false
+            });
+        }
+    }
+
+    validar_funcionario_administrador = async (req, res, next) => {
         const email = req.body.email;
+        const cpf = req.body.cpf;
+
         const funcionario = new Funcionario();
         funcionario.email = email;
-        const resultado = await funcionario.verificarEmail();
+        funcionario.cpf = cpf;
+
+        const resultado = await funcionario.verificarDadosAdmin();
+        console.log("Resultado" + resultado)
         if (resultado) {
             req.funcionario = resultado;
             next();
@@ -188,4 +213,8 @@ module.exports = class MiddlewareFuncionario {
             });
         }
     }
-}
+       
+        
+ }
+
+

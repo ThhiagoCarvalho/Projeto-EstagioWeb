@@ -21,11 +21,37 @@ module.exports = class RouterFuncionario {
             this._middlewareFuncionario.validar_salario,
             this._middlewareFuncionario.validar_data_contratacao,
             this._middlewareFuncionario.validar_departamento_id,
+            this._middlewareFuncionario.validar_funcionario,
 
             this._controleFuncionario.controle_funcionario_post
         )
+
+        this._router.put ('/:id' ,
+
+            this._middlewareFuncionario.validar_nome,
+            this._middlewareFuncionario.validar_email,
+            this._middlewareFuncionario.validar_cpf,
+            this._middlewareFuncionario.validar_cargo,
+            this._middlewareFuncionario.validar_salario,
+            this._middlewareFuncionario.validar_data_contratacao,
+            this._middlewareFuncionario.validar_departamento_id,
+
+            this._controleFuncionario.controle_funcionario_put
+        )
         
 
+        this._router.get ('/' ,
+            this._controleFuncionario.controle_funcionario_get
+        )
+
+        this._router.delete ('/:id' ,
+            this._middlewareFuncionario.validar_funcionario_logado,
+
+
+            this._controleFuncionario.controle_funcionario_delete
+        )
+
+    
         this._router.post ('/csv' ,
             this._middlewareFuncionario.uploadJSON,             
             this._middlewareFuncionario.validar_nome,
@@ -34,7 +60,7 @@ module.exports = class RouterFuncionario {
             this._middlewareFuncionario.validar_cargo,
             this._middlewareFuncionario.validar_salario,
             this._middlewareFuncionario.validar_data_contratacao,
-
+            this._middlewareFuncionario.validar_funcionario,
             this._controleFuncionario.controle_csv_funcionario
         )
 
@@ -44,19 +70,10 @@ module.exports = class RouterFuncionario {
             this._middlewareFuncionario.validar_email,
             this._middlewareFuncionario.validar_cpf,
 
-            this._middlewareFuncionario.validar_funcionario_logado,
+
+            this._middlewareFuncionario.validar_funcionario_administrador,
             this._controleFuncionario.controle_funcionario_login
         )
-
-
-        /*this._router.put ('/senha' ,
-            this._middlewareFuncionario.validar_email,
-            this._middlewareFuncionario.validar_cpf,
-
-            this._middlewareFuncionario.validar_funcionario_logado,
-            this._controleFuncionario.controle_funcionario_update
-        )
-*/
     
         return this._router
 

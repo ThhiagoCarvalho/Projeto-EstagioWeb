@@ -40,9 +40,9 @@ module.exports = class controlFuncionario {
             funcionario.cargo = campos[4];
             funcionario.data_contratacao = campos[5];
       
-            const existeFuncionario = await funcionario.getFuncionario(); // Verifica se já existe
+            const existeFuncionario = await funcionario.verificarEmail(); // Verifica se já existe
             if (!existeFuncionario) {
-              const Funcionariocriado = await funcionario.createFromCsv();
+              const Funcionariocriado = await funcionario.post_funcionario();
               if (Funcionariocriado) {
                 funcionariosCriados.push(funcionario);
                 i++;
@@ -73,12 +73,12 @@ module.exports = class controlFuncionario {
     async controle_funcionario_login (request , response)  {
         const objfuncionario = request.funcionario
         const objToken = new TokenJWT ()
+
         const objClaimsToken = {
           email: objfuncionario.email,
           cpf: objfuncionario.cpf
 
         }
-        
         const novoToken = objToken.gerarToken(objClaimsToken)
     
         const objResposta = {
@@ -121,6 +121,62 @@ module.exports = class controlFuncionario {
     }
     
 
+    async controle_funcionario_put(request, response) {
+      console.log(request.body)
+      const id = request.params.id;
+      const nome = request.body.nome;
+      const email = request.body.email;
+      const cpf = request.body.cpf;
+      const cargo = request.body.cargo;
+      const salario = request.body.salario;
+      const data_contratacao = request.body.data_contratacao;
+      const departamento_id = request.body.departamento_id;
+    
+      const funcionario = new Funcionario();
+      funcionario.id = id;
+      funcionario.nome = nome;
+      funcionario.email = email;
+      funcionario.cpf = cpf;
+      funcionario.cargo = cargo;
+      funcionario.salario = salario;
+      funcionario.data_contratacao = data_contratacao;
+      funcionario.departamento_id = departamento_id;
+    
+      const funcionarioAtualizado = await funcionario.put_funcionario();
+    
+      const objResposta = {
+        cod: 1,
+        status: funcionarioAtualizado,
+        msg: funcionarioAtualizado ? 'Funcionário atualizado com sucesso' : 'Erro ao atualizar funcionário'
+      };
+      response.status(200).send(objResposta);
+    }
 
+
+    async controle_funcionario_get(request, response) {
+      const funcionario = new Funcionario();
+      const resultadofuncionario = await funcionario.readAll();
+    
+      const objResposta = {
+        cod: 1,
+        status: true,
+        dados: resultadofuncionario 
+      };
+      response.status(200).send(objResposta);
+    }
+
+    async controle_funcionario_delete(request, response) {
+      const id = request.params.id;
+      const funcionario = new Funcionario();
+      funcionario.id = id
+      const resultadofuncionario = await funcionario.delete();
+    
+      const objResposta = {
+        cod: 1,
+        status: true,
+        msg: resultadofuncionario ? "deletado com sucesso!" : "Erro ao deletar"
+      };
+      response.status(200).send(objResposta);
+    }
 
 }

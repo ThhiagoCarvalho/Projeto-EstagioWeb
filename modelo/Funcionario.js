@@ -1,3 +1,4 @@
+const e = require("express")
 const Banco = require("./Banco")
 module.exports = class Funcionario {
 
@@ -14,7 +15,6 @@ module.exports = class Funcionario {
 
 
     async post_funcionario () {
-      console.log(this.nome,this.email,this.cpf,this.cargo)
         const conexao = Banco.getConexao()
         const sql = "INSERT INTO funcionarios (nome, email, cpf, cargo, salario, data_contratacao, departamento_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try { 
@@ -28,7 +28,98 @@ module.exports = class Funcionario {
     }
 
 
+    async put_funcionario () {
+        const conexao = Banco.getConexao()
+        const sql = "UPDATE funcionarios SET nome = ?, email = ?, cpf = ?, cargo = ?, salario = ?, data_contratacao = ?, departamento_id = ? WHERE id = ?";
+        try { 
+            const [result] = await conexao.promise().execute(sql , [this.nome, this.email,  this.cpf, this.cargo,this.salario,this.data_contratacao,this.departamento_id, this.id])
+            return result.affectedRows > 0;
+        }catch (error) {
+            console.log("Errro >>>" , error)
+            return false
+        }
+    }
 
+
+    async verificarEmail () {
+      const conexao = Banco.getConexao()
+      const sql = "select * from funcionarios where email = ?"
+      try {
+          const [result] = await conexao.promise().execute(sql , [ this._email])
+          console.log(result)
+          if (result.length > 0) {
+              return true
+          } else {
+              return false;
+          }            
+      }catch (error) { 
+          console.log("Errro >>>" , error)
+          return false
+      }
+  }
+
+  async verificarExistencia () {
+    const conexao = Banco.getConexao()
+    const sql = "select * from funcionarios where id = ?"
+    try {
+        const [result] = await conexao.promise().execute(sql , [ this.id])
+        console.log(result)
+        if (result.length > 0) {
+            return true
+        } else {
+            return false;
+        }            
+    }catch (error) { 
+        console.log("Errro >>>" , error)
+        return false
+    }
+}
+
+
+
+  async verificarDadosAdmin () {
+    console.log(this.email)
+    console.log(this.cpf)
+    const conexao = Banco.getConexao()
+    const sql = "select count(*) AS qtd,nome,email,cpf from funcionarios where email = ? and cpf = ? and cargo = 'administrador' group by nome,email,cpf"
+    try {
+        const [result] = await conexao.promise().execute(sql , [ this._email, this.cpf])
+        console.log(result)
+        if (result.length === 1) {
+          const funcionario = result[0];
+          this._nome = funcionario.nome;
+          return true;
+      }
+      return false;      
+    }catch (error) { 
+        console.log("Errro >>>" , error)
+        return false
+    }
+}
+
+    async readAll () {
+        const conexao = Banco.getConexao()
+        const sql = "SELECT * from funcionarios";
+        try { 
+            const [result] = await conexao.promise().execute(sql , )
+            return result;
+        }catch (error) {
+            console.log("Errro >>>" , error)
+            return false
+        }
+    }
+
+    async delete () {
+      const conexao = Banco.getConexao()
+      const sql = "delete from funcionarios where id = ?";
+      try { 
+          const [result] = await conexao.promise().execute(sql , [this.id])
+          return result;
+      }catch (error) {
+          console.log("Errro >>>" , error)
+          return false
+      }
+  }
 
     get id() {
         return this._id;
