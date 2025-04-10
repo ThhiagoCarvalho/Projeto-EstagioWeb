@@ -15,6 +15,12 @@ module.exports = class Funcionario {
 
 
     async post_funcionario () {
+      console.log("nome" + this.nome)
+      console.log("email" + this.email)
+      console.log("nome"  + this.cpf)
+      console.log("nome"  + this.cargo)
+      console.log("nome")
+
         const conexao = Banco.getConexao()
         const sql = "INSERT INTO funcionarios (nome, email, cpf, cargo, salario, data_contratacao, departamento_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try { 

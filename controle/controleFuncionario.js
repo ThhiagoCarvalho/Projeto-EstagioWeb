@@ -9,65 +9,50 @@ const TokenJWT = require(".././modelo/TokenJWT")
 const upload = multer({ dest: 'uploads/' }); // Diretório temporário para arquivos
 
 module.exports = class controlFuncionario {
-    
-    async controle_csv_funcionario(request, response) {
-        try {
-          const file = request.file;
-      
-          if (!file || !file.path) {
-            return response.status(400).json({ error: 'Arquivo CSV não encontrado!' });
-          }
-      
-          const ponteiroArquivo = fs.createReadStream(file.path);
-          const leitorLinha = readline.createInterface({
-            input: ponteiroArquivo,
-            crlfDelay: Infinity,
-          });
-      
-          let i = 0;
-          const funcionariosCriados = [];
-          let qtdFuncionariosDuplicados = 0;
-          const funcionariosDuplicados = [];
-      
-          for await (const linhaArquivo of leitorLinha) {
-            const campos = linhaArquivo.split(';');
-      
-            const funcionario = new Funcionario();
-            funcionario.cpf = campos[0];
-            funcionario.nome = campos[1];
-            funcionario.email = campos[2];
-            funcionario.salario = campos[3];
-            funcionario.cargo = campos[4];
-            funcionario.data_contratacao = campos[5];
-      
-            const existeFuncionario = await funcionario.verificarEmail(); // Verifica se já existe
-            if (!existeFuncionario) {
-              const Funcionariocriado = await funcionario.post_funcionario();
-              if (Funcionariocriado) {
-                funcionariosCriados.push(funcionario);
-                i++;
-              }
-            } else {
-              qtdFuncionariosDuplicados++;
-              funcionariosDuplicados.push(funcionario.nome);
-            }
-          }
-      
-          console.log('Funcionários processados:', funcionariosCriados);
-          console.log('Quantidade de Funcionários duplicados:', qtdFuncionariosDuplicados);
-          console.log('Funcionários duplicados:', funcionariosDuplicados);
-      
-          return response.status(200).json({
-            message: 'Arquivo processado com sucesso!',
-            processados: funcionariosCriados.length,
-            duplicados: qtdFuncionariosDuplicados,
-          });
-      
-        } catch (error) {
-          console.error("Erro ao processar CSV de funcionários:", error);
-          return response.status(500).json({ error: 'Erro interno do servidor!' });
+  async controle_csv_funcionario(request, response) {
+    try {
+        const lista = request.body.funcionarios;
+        if (!Array.isArray(lista)) {
+            return response.status(400).json({ msg: 'Dados de funcionários inválidos' });
         }
+
+        const funcionariosCriados = [];
+        const funcionariosDuplicados = [];
+
+        for (const dados of lista) {
+          console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeee" + dados)
+
+            const funcionario = new Funcionario();
+            funcionario.nome = dados.nome;
+            funcionario.email = dados.email;
+            funcionario.cpf = dados.cpf;
+            funcionario.cargo = dados.cargo;
+            funcionario.salario = dados.salario;
+            funcionario.data_contratacao = dados.data_contratacao;
+            funcionario.departamento_id = dados.departamento_id;
+
+            const existe = await funcionario.verificarEmail();
+            console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeee" + existe)
+            if (!existe) {
+                const criado = await funcionario.post_funcionario();
+                if (criado) funcionariosCriados.push(funcionario);
+            } else {
+                funcionariosDuplicados.push(dados.nome || dados.email);
+            }
+        }
+
+        return response.status(200).json({
+            message: 'Funcionários processados com sucesso!',
+            processados: funcionariosCriados.length,
+            duplicados: funcionariosDuplicados.length,
+            nomes_duplicados: funcionariosDuplicados
+        });
+
+    } catch (error) {
+        console.error("Erro ao processar CSV:", error);
+        return response.status(500).json({ error: 'Erro interno do servidor!' });
     }
+}
 
 
     async controle_funcionario_login (request , response)  {

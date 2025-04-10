@@ -14,14 +14,15 @@ module.exports = class MiddlewareFuncionario {
                 try {
                     if (req.file) {
                         const ext = path.extname(req.file.originalname).toLowerCase();
-                        const conteudo = await fs.promises.readFile(req.file.path, 'utf8');
-
+                        const caminhoCompleto = path.resolve(req.file.path);
+                        const conteudo = await fs.promises.readFile(caminhoCompleto, 'utf8');
                         if (ext === '.json') {
                             req.body = JSON.parse(conteudo);
                         } else if (ext === '.csv') {
-                            const registros = parse(conteudo, { columns: true, skip_empty_lines: true, trim: true ,  delimiter: ';'});
-                            req.body.funcionarios = registros;
+                            const registros = parse(conteudo, {  columns: true,  skip_empty_lines: true, trim: true});
+                            req.body = { funcionarios: registros };
                         } else {
+                            await fs.promises.unlink(req.file.path);
                             return res.status(400).json({ msg: 'Formato de arquivo não suportado (apenas .json ou .csv)' });
                         }
 
@@ -41,21 +42,20 @@ module.exports = class MiddlewareFuncionario {
     }
 
     normalizarFuncionarios = (body) => {
-        if (Array.isArray(body.funcionarios)) {
-            return body.funcionarios;
-        } else if (body.funcionarios) {
-            return [body.funcionarios];
-        } else {
-            return [body];
-        }
+        if (Array.isArray(body.funcionarios)) return body.funcionarios;
+        if (body.funcionarios) return [body.funcionarios];
+        if (Array.isArray(body)) return body;
+        return [body];
     }
 
     validar_nome = (req, res, next) => {
         const funcionarios = this.normalizarFuncionarios(req.body);
         for (let i = 0; i < funcionarios.length; i++) {
-            const  nome  = funcionarios[i].nome;
-                        console.log(funcionarios[i].nome)
-                        console.log(nome)
+            const nome = funcionarios[i]?.nome?.trim();
+            console.log(funcionarios[i] )
+
+            console.log(funcionarios[i].nome + "nome")
+            console.log(nome + "nome")
 
             if (!nome || nome.length < 3) {
                 return res.status(400).json({
@@ -131,11 +131,13 @@ module.exports = class MiddlewareFuncionario {
     }
 
     validar_data_contratacao = (req, res, next) => {
+
         const funcionarios = this.normalizarFuncionarios(req.body);
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
         for (let i = 0; i < funcionarios.length; i++) {
             const data = new Date(funcionarios[i].data_contratacao);
+            console.log(funcionarios[i])
             if (!funcionarios[i].data_contratacao || isNaN(data.getTime()) || data > hoje) {
                 return res.status(400).json({
                     cod: 6,
@@ -148,6 +150,8 @@ module.exports = class MiddlewareFuncionario {
     }
 
     validar_departamento_id = (req, res, next) => {
+        console.log("validar_departamento_id")
+
         const funcionarios = this.normalizarFuncionarios(req.body);
         for (let i = 0; i < funcionarios.length; i++) {
             const depId = funcionarios[i].departamento_id; // corrigido nome do campo
@@ -173,8 +177,6 @@ module.exports = class MiddlewareFuncionario {
                 status: false
             });
         }
-        console.log("contorle")
-
         next();
     }
 
@@ -213,8 +215,8 @@ module.exports = class MiddlewareFuncionario {
             });
         }
     }
-       
-        
- }
+
+
+}
 
 

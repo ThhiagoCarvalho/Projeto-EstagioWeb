@@ -60,7 +60,7 @@ module.exports = class RouterFuncionario {
             this._middlewareFuncionario.validar_cargo,
             this._middlewareFuncionario.validar_salario,
             this._middlewareFuncionario.validar_data_contratacao,
-            this._middlewareFuncionario.validar_funcionario,
+
             this._controleFuncionario.controle_csv_funcionario
         )
 
