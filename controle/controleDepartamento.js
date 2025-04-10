@@ -27,7 +27,7 @@ module.exports = class controlDepartamento {
         departamento.localizacao = dados.localizacao;
         departamento.data_criacao = dados.data_criacao;
 
-        const existeDepartamento = await departamento.getDepartamento();
+        const existeDepartamento = await departamento.verificarExistencia();
         if (!existeDepartamento) {
           const criado = await departamento.post_departamento();
           if (criado) departamentosCriados.push(departamento);
@@ -61,7 +61,7 @@ module.exports = class controlDepartamento {
     departamento.nome = nome;
     departamento.orcamento = orcamento;
     departamento.localizacao = localizacao;
-    departamento.data_criacao = data_abertura;
+    departamento.data_criacao = data_criacao;
 
     const departamentoCriado = await departamento.post_departamento();
 
@@ -87,25 +87,23 @@ module.exports = class controlDepartamento {
     departamento.nome = nome;
     departamento.orcamento = orcamento;
     departamento.localizacao = localizacao;
-    departamento.data_criacao = data_abertura;
+    departamento.data_criacao = data_criacao;
 
-    const departamentoCriado = await departamento.post_departamento();
+    const departamentoCriado = await departamento.put_departamento();
 
     const objResposta = {
       cod: 1,
       status: departamentoCriado,
-      msg: departamentoCriado ? 'Departamentos criada com sucesso' : 'Erro ao cadastrar departamentos'
+      msg: departamentoCriado ? 'Departamentos atualizado com sucesso' : 'Erro ao atualizar departamentos'
     };
     response.status(200).send(objResposta);
   }
 
   async controle_departamento_readPage(request, response) {
-    const id = request.params.id;
+    const id = parseInt(request.params.id);
 
     const departamento = new Departamento();
-    departamento.id = id
-
-    const Resultadodepartamento = await departamento.readPage();
+    const Resultadodepartamento = await departamento.readPage(id);
 
     const objResposta = {
       cod: 1,

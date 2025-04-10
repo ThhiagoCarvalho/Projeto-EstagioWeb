@@ -17,7 +17,7 @@ module.exports = class Departamento {
 
         try {
             const [result] = await conexao.promise().execute(sql, [this.nome, this.orcamento, this.localizacao, this.data_criacao])
-            this._idDepartamento = result.insertId;
+            this._id = result.insertId;
             return result.affectedRows > 0;
         } catch (error) {
             console.log("Errro >>>", error)
@@ -27,7 +27,7 @@ module.exports = class Departamento {
 
     async put_departamento() {
         const conexao = Banco.getConexao()
-        const sql = "UPDATE departamentos SET nome = ?, orcamento = ?, localizacao = ?, data_criacao = ? WHERE idDepartamento = ?";
+        const sql = "UPDATE departamentos SET nome = ?, orcamento = ?, localizacao = ?, data_criacao = ? WHERE id = ?";
 
         try {
             const [result] = await conexao.promise().execute(sql, [this.nome, this.orcamento, this.localizacao, this.data_criacao, this.id])
@@ -42,7 +42,7 @@ module.exports = class Departamento {
         const itensPorPagina = 10;
         const inicio = (parseInt(pagina) - 1) * itensPorPagina;
         const conexao = Banco.getConexao()
-        const sql = "SELECT * from departamentos ";
+        const sql = "SELECT * from departamentos";
         try {
             const [result] = await conexao.promise().execute(sql, [inicio, parseInt(itensPorPagina)])
             return result;
@@ -53,9 +53,9 @@ module.exports = class Departamento {
     }
 
 
-    async delete_departamento() {
+    async delete() {
         const conexao = Banco.getConexao();
-        const sql = "DELETE FROM departamentos WHERE idDepartamento = ?";
+        const sql = "DELETE FROM departamentos WHERE id = ?";
 
         try {
             const [result] = await conexao.promise().execute(sql, [this._id]);
@@ -69,9 +69,9 @@ module.exports = class Departamento {
 
     async verificarExistencia() {
         const conexao = Banco.getConexao()
-        const sql = "select * from departamentos where id = ?"
+        const sql = "select * from departamentos where nome = ?"
         try {
-            const [result] = await conexao.promise().execute(sql, [this.id])
+            const [result] = await conexao.promise().execute(sql, [this.nome])
             console.log(result)
             if (result.length > 0) {
                 return true

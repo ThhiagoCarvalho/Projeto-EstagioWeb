@@ -23,12 +23,13 @@ module.exports = class RouterDepartamento {
             this._controleDepartamento.controle_departamento_post
         )
 
-        this._router.put ('/' ,
+        this._router.put ('/:id' ,
 
             this._middlewareDepartamento.validar_nome,
             this._middlewareDepartamento.validar_orcamento,
             this._middlewareDepartamento.validar_localizacao,
             this._middlewareDepartamento.validar_data_criacao,
+            this._middlewareDepartamento.validar_departamento_logado,
 
             this._controleDepartamento.controle_departamento_put
         )
