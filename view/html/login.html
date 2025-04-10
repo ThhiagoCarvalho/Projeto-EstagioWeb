@@ -84,7 +84,7 @@
             respJson = JSON.parse(texto_json)
             try {
                 if (respJson.status == false) {
-                    mensage_error.textContent = respJson.error;
+                    mensage_error.textContent = respJson.msg;
                     mensage_error.style.display = "block";
                     return;
                 } else {

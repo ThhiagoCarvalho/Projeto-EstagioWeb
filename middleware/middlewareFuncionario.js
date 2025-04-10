@@ -21,12 +21,8 @@ module.exports = class MiddlewareFuncionario {
                         } else if (ext === '.csv') {
                             const registros = parse(conteudo, {  columns: true,  skip_empty_lines: true, trim: true});
                             req.body = { funcionarios: registros };
-                        } else {
-                            await fs.promises.unlink(req.file.path);
+                        } else 
                             return res.status(400).json({ msg: 'Formato de arquivo não suportado (apenas .json ou .csv)' });
-                        }
-
-                        await fs.promises.unlink(req.file.path);
                     }
 
                     if (!req.body || (!req.body.funcionarios && Object.keys(req.body).length === 0))
@@ -47,21 +43,17 @@ module.exports = class MiddlewareFuncionario {
         if (Array.isArray(body)) return body;
         return [body];
     }
-
     validar_nome = (req, res, next) => {
         const funcionarios = this.normalizarFuncionarios(req.body);
         for (let i = 0; i < funcionarios.length; i++) {
             const nome = funcionarios[i]?.nome?.trim();
-            console.log(funcionarios[i] )
-
-            console.log(funcionarios[i].nome + "nome")
-            console.log(nome + "nome")
-
+            const identificador = funcionarios.length === 1 ? "" : `do funcionário ${i + 1}`;
+    
             if (!nome || nome.length < 3) {
                 return res.status(400).json({
                     cod: 1,
                     status: false,
-                    msg: `O nome do funcionário ${i + 1} é inválido ou muito curto.`,
+                    msg: `O nome ${identificador || 'informado'} é inválido ou muito curto.`,
                 });
             }
         }
@@ -71,44 +63,52 @@ module.exports = class MiddlewareFuncionario {
     validar_email = (req, res, next) => {
         const funcionarios = this.normalizarFuncionarios(req.body);
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
         for (let i = 0; i < funcionarios.length; i++) {
             const { email } = funcionarios[i];
+            const identificador = funcionarios.length === 1 ? "" : `do funcionário ${i + 1}`;
+    
             if (!email || !regexEmail.test(email)) {
                 return res.status(400).json({
                     cod: 2,
                     status: false,
-                    msg: `O e-mail do funcionário ${i + 1} é inválido.`,
+                    msg: `O e-mail ${identificador || 'informado'} é inválido.`,
                 });
             }
         }
         next();
     }
-
     validar_cpf = (req, res, next) => {
         const funcionarios = this.normalizarFuncionarios(req.body);
         const regexCPF = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
+    
         for (let i = 0; i < funcionarios.length; i++) {
             const { cpf } = funcionarios[i];
+            const identificador = funcionarios.length === 1 ? "" : `do funcionário ${i + 1}`
+    
             if (!cpf || !regexCPF.test(cpf)) {
                 return res.status(400).json({
                     cod: 3,
                     status: false,
-                    msg: `O CPF do funcionário ${i + 1} é inválido. Use o formato: 000.000.000-00`,
+                    msg: `O CPF ${identificador} é inválido. Use o formato: 000.000.000-00`,
                 });
             }
         }
         next();
     }
+    
 
     validar_cargo = (req, res, next) => {
         const funcionarios = this.normalizarFuncionarios(req.body);
         for (let i = 0; i < funcionarios.length; i++) {
             const { cargo } = funcionarios[i];
+            const identificador = funcionarios.length === 1 ? "" : `do funcionário ${i + 1}`;
+    
             if (!cargo || cargo.length < 2) {
                 return res.status(400).json({
                     cod: 4,
                     status: false,
-                    msg: `O cargo do funcionário ${i + 1} é inválido.`,
+                    msg: `O cargo ${identificador || 'informado'} é inválido.`,
                 });
             }
         }
@@ -119,30 +119,34 @@ module.exports = class MiddlewareFuncionario {
         const funcionarios = this.normalizarFuncionarios(req.body);
         for (let i = 0; i < funcionarios.length; i++) {
             const { salario } = funcionarios[i];
+            const identificador = funcionarios.length === 1 ? "" : `do funcionário ${i + 1}`;
+    
             if (salario === undefined || isNaN(salario) || parseFloat(salario) <= 0) {
                 return res.status(400).json({
                     cod: 5,
                     status: false,
-                    msg: `O salário do funcionário ${i + 1} é inválido.`,
+                    msg: `O salário ${identificador || 'informado'} é inválido.`,
                 });
             }
         }
         next();
     }
+    
 
     validar_data_contratacao = (req, res, next) => {
-
         const funcionarios = this.normalizarFuncionarios(req.body);
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
+    
         for (let i = 0; i < funcionarios.length; i++) {
             const data = new Date(funcionarios[i].data_contratacao);
-            console.log(funcionarios[i])
+            const identificador = funcionarios.length === 1 ? "" : `do funcionário ${i + 1}`;
+    
             if (!funcionarios[i].data_contratacao || isNaN(data.getTime()) || data > hoje) {
                 return res.status(400).json({
                     cod: 6,
                     status: false,
-                    msg: `A data de contratação do funcionário ${i + 1} é inválida ou está no futuro.`,
+                    msg: `A data de contratação ${identificador || 'informada'} é inválida ou está no futuro.`,
                 });
             }
         }
@@ -150,22 +154,22 @@ module.exports = class MiddlewareFuncionario {
     }
 
     validar_departamento_id = (req, res, next) => {
-        console.log("validar_departamento_id")
-
         const funcionarios = this.normalizarFuncionarios(req.body);
         for (let i = 0; i < funcionarios.length; i++) {
-            const depId = funcionarios[i].departamento_id; // corrigido nome do campo
+            const depId = funcionarios[i].departamento_id;
+            const identificador = funcionarios.length === 1 ? "" : `do funcionário ${i + 1}`;
+    
             if (isNaN(depId) || depId <= 0) {
                 return res.status(400).json({
                     cod: 7,
                     status: false,
-                    msg: `Departamento ID inválido no funcionário ${i + 1}`
+                    msg: `O ID do departamento ${identificador || 'informado'} é inválido.`,
                 });
             }
         }
         next();
     }
-
+    
     validar_funcionario = async (req, res, next) => {
         const email = req.body.email;
         const funcionario = new Funcionario();
@@ -210,7 +214,7 @@ module.exports = class MiddlewareFuncionario {
             next();
         } else {
             return res.status(400).json({
-                msg: "Este email de funcionário não está cadastrado!",
+                msg: "Este email não está cadastrado como administrador!",
                 status: false
             });
         }
