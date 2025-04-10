@@ -148,6 +148,8 @@
         const menuDiv = document.getElementById("menu-mobile")
         const btnAnimar = document.getElementById("btn-menu")
         const forms = document.getElementById("container-wrapper")
+        const dadosFuncionarios = localStorage.getItem("Funcionarios")
+        const objFuncionario = JSON.parse(dadosFuncionarios);
 
         btnAnimar.addEventListener('click', animarMenu)
         function animarMenu() {
@@ -162,8 +164,6 @@
                 forms.style.display = "flex"; // Mostra o formulário novamente
             }
         }
-
-
 
 
         function toggleSubmenu(event) {

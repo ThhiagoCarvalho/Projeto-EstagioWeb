@@ -362,3 +362,36 @@ button.ativo {
   }
   
 
+
+
+  .text-danger {
+    margin-left: 25px;
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.button.sucesso {
+    background-color: #41df75;
+    border-style: outset;
+    color: white;
+    border-color: #50df57;
+}
+
+#TabelaGetOpcao {
+    width: 100%;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#TabelaGetOpcao th, #TabelaGetOpcao td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+#TabelaGetOpcao th {
+    font-weight: bold;
+}
+
