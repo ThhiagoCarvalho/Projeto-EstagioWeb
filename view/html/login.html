@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVAP</title>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+    <main>
+        <div class="container">
+            <div class="header">
+                <div class="logo">
+                    <img src="./a-group-of-employees-worker-lawyer-team-work_55028_wh860__1_-removebg-preview.png">
+                </div>
+                <h2>Sistema de Gerenciamento</h2>
+                <h2> de Funcionarios</h2>
+            </div>
+
+            <div class="login_body">
+                <form>
+
+
+                    <div class="input_box">
+                        <h3> Digite seu email:</h3>
+                        <input type="email" placeholder="Email" id="emailtxt" required>
+                    </div>
+                    <div class="input_box">
+                        <h3> Digite seu cpf:</h3>
+                        <input type="text" placeholder="CPF" id="registrocpf" required>
+                    </div>
+                    <div>
+                        <button id="buttonOK" type="button" class="buttonOK">Entrar</button>
+                    </div>
+
+                    <div id="error-message" class="errorMensagge" style="display: none;"></div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const mensage_error = document.getElementById("error-message");
+        const buttonOK = document.getElementById("buttonOK");
+        const emailtxt = document.getElementById("emailtxt");
+        const registrocpf = document.getElementById("registrocpf");
+
+        buttonOK.onclick = function () {
+            login();
+        };
+
+        function login() {
+      
+            let cpf = registrocpf.value;
+            let email = emailtxt.value;
+      console.log(cpf)
+            console.log(email)
+            let jsonEnvio = {
+                "cpf": cpf,
+                "email": email
+            };
+
+            let uri = '/funcionarios/login';
+            fetch(uri, {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonEnvio)
+            }).then((response) => {
+                return response.text();
+            }).then((data) => {
+                processarResultados(data)
+
+            }).catch((error) => {
+                console.log(error);
+            });
+
+        }
+        function processarResultados(texto_json) {
+            respJson = JSON.parse(texto_json)
+            try {
+                if (respJson.status == false) {
+                    mensage_error.textContent = respJson.error;
+                    mensage_error.style.display = "block";
+                    return;
+                } else {
+                    mensage_error.style.display = "none";
+                    localStorage.setItem("Funcionario", JSON.stringify(respJson));
+                    window.location.href = "../html/paginaInicial.html";
+                  
+                }
+            } catch (error) {
+                console.error("Erro ao processar o JSON:", error);
+                mensage_error.textContent = "Erro ao processar a resposta do servidor.";
+                mensage_error.style.display = "block";
+            }
+        }
+    </script>
+</body>
+
+</html>

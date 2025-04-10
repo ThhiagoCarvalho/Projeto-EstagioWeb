@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const portaServico = 3000;
 const RouterFuncionario = require("./router/routerFuncionario");
-const RouterAgencia = require("./router/routerAgencia");
+const RouterDepartamento = require("./router/routerDepartamento");
 
 app.use(express.json());
 app.use(express.static('js'));
@@ -15,9 +15,9 @@ app.get('/', (req, res) => {
 });
 
 const roteadorFuncionario = new RouterFuncionario();
-const roteadorAgencia = new RouterAgencia();
+const roteadorDepartamento = new RouterDepartamento();
 
-app.use('/agencias/', roteadorAgencia.criarRotasAgencia());
+app.use('/departamentos/', roteadorDepartamento.criarRotasDepartamento());
 app.use('/funcionarios', roteadorFuncionario.criarRotasFuncionario());
 
 app.listen(portaServico, () => {

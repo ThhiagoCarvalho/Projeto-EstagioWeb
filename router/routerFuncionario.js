@@ -40,8 +40,8 @@ module.exports = class RouterFuncionario {
         )
         
 
-        this._router.get ('/' ,
-            this._controleFuncionario.controle_funcionario_get
+        this._router.get ('/:id' ,
+            this._controleFuncionario.controle_funcionario_readPage
         )
 
         this._router.delete ('/:id' ,
