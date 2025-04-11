@@ -11,6 +11,7 @@
     /* Menu e conteúdo lado a lado */
     flex-direction: row;
     min-height: 100vh;
+    padding-left: 95px
 }
 
 .menu-desktop {
@@ -52,6 +53,7 @@ header .menu-desktop nav ul {
     display: flex;
     flex-direction: column;
     height: 100%;
+ 
 }
 
 .container .texto-inicio {

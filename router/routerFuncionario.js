@@ -52,7 +52,7 @@ module.exports = class RouterFuncionario {
         )
 
     
-        this._router.post ('/csv' ,
+        this._router.post ('/upload' ,
             this._middlewareFuncionario.uploadJSON,             
             this._middlewareFuncionario.validar_nome,
             this._middlewareFuncionario.validar_email,
