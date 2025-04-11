@@ -223,6 +223,62 @@
                         </div>
                     </div>
 
+
+                    <div class="modal fade" id="modalPerfilFuncionario" tabindex="-1" aria-labelledby="modalEditarLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <form id="formAtualizarFuncionario">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalEditarLabel">Perfil do Funcionário</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Fechar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" id="id">
+                                        <div class="row g-2">
+                                            <div class="col-md-6">
+                                                <input type="text" id="telefone" class="form-control" placeholder="Nome"
+                                                    required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="email" id="endereco" class="form-control"
+                                                    placeholder="Email" required>
+                                            </div>
+                                            <div class="col-md-4 mt-2">
+                                                <input type="text" id="genero" class="form-control" placeholder="CPF"
+                                                    required>
+                                            </div>
+                                            <div class="col-md-4 mt-2">
+                                                <input type="text" id="idade" class="form-control" placeholder="Cargo"
+                                                    required>
+                                            </div>
+                                            <div class="col-md-4 mt-2">
+                                                <input type="number" id="estado_civil" class="form-control"
+                                                    placeholder="Salário" required>
+                                            </div>
+                                            <div id="error-message-perfilCadastro" class="text-danger mt-2"
+                                                style="display: none;"></div>
+                                            <div id="error-message-perfil" class="text-danger mt-2"
+                                                style="display: none;"></div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success"
+                                                id="botaoCadastrarPerfil">Cadastrar</button>
+                                            <button type="submit" class="btn btn-primary"
+                                                id="botaoAtualizarPerfil">Atualizar</button>
+                                            <button type="button" class="btn btn-danger"
+                                                id="botaoDeletarPerfil">Deletar</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Modal -->
 
 
@@ -301,6 +357,14 @@
         const mensage_error_arquivo = document.getElementById("error-message_post_arquivo");
 
 
+
+        const btnCadastroPerfil = document.getElementById("botaoCadastrarPerfil")
+        const btnAtualizarPerfil = document.getElementById("botaoAtualizarPerfil")
+        const btnDeletarPerfil = document.getElementById("botaoDeletarPerfil")
+
+        const mensage_error_perfilCadastro = document.getElementById("error-message-perfilCadastro");
+        const mensage_error_perfil = document.getElementById("error-message-perfil");
+
         document.addEventListener('DOMContentLoaded', function () {
             const uri_funcionarios = `/funcionarios/1`;
 
@@ -357,11 +421,15 @@
                     const colunaBotaoOpcao = document.createElement('td'); // Criando uma nova coluna para o botão
                     const btnExcluirFuncionario = document.createElement('button')
                     const btnAtualizarFuncionario = document.createElement('button')
+                    const btnVisualizarPeril = document.createElement('button')
+
 
                     btnAtualizarFuncionario.textContent = 'Atualizar'; // Definindo o texto do botão
 
                     btnExcluirFuncionario.textContent = 'Excluir'; // Definindo o texto do botão
+                    btnVisualizarPeril.textContent = 'Perfil'; // Definindo o texto do botão
 
+                    colunaBotaoOpcao.appendChild(btnVisualizarPeril);
                     colunaBotaoOpcao.appendChild(btnAtualizarFuncionario);
                     colunaBotaoOpcao.appendChild(btnExcluirFuncionario);
 
@@ -390,6 +458,81 @@
                         modal.show();
                     }
 
+                    btnExcluirFuncionario.onclick = function (event) {
+                        event.preventDefault();
+
+                        if (confirm("Tem certeza que deseja excluir este funcionário?")) {
+                            deletarFuncionario(dados_get.id);
+                        }
+                    }
+
+
+                    btnVisualizarPeril.onclick = function (event) {
+                        event.preventDefault();
+
+                        fetch(`/perfil/${dados_get.id}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                const temPerfil = data && data.status !== false && data.perfil;
+
+                                // Preencher ID oculto
+                                document.getElementById("id").value = dados_get.id;
+
+                                if (temPerfil) {
+                                    // Preenche os dados no formulário
+                                    document.getElementById("telefone").value = data.perfil.telefone || "";
+                                    document.getElementById("endereco").value = data.perfil.endereco || "";
+                                    document.getElementById("genero").value = data.perfil.genero || "";
+                                    document.getElementById("idade").value = data.perfil.idade || "";
+                                    document.getElementById("estado_civil").value = data.perfil.estado_civil || "";
+
+                                    // Mostrar botões Atualizar e Deletar, esconder Cadastrar
+                                    btnAtualizarPerfil.style.display = "inline-block";
+                                    btnDeletarPerfil.style.display = "inline-block";
+                                    btnCadastroPerfil.style.display = "none";
+                                } else {
+                                    // Limpa campos e prepara para novo cadastro
+                                    document.getElementById("telefone").value = "";
+                                    document.getElementById("endereco").value = "";
+                                    document.getElementById("genero").value = "";
+                                    document.getElementById("idade").value = "";
+                                    document.getElementById("estado_civil").value = "";
+
+                                    // Mostrar botão Cadastrar, esconder os outros
+                                    btnAtualizarPerfil.style.display = "none";
+                                    btnDeletarPerfil.style.display = "none";
+                                    btnCadastroPerfil.style.display = "inline-block";
+                                }
+
+                                const modalPerfil = new bootstrap.Modal(document.getElementById('modalPerfilFuncionario'));
+                                modalPerfil.show();
+                            })
+                            .catch(err => {
+                                alert("Erro ao buscar perfil.");
+                                console.error(err);
+                            });
+
+                        btnDeletarPerfil.onclick = function (event) {
+                            event.preventDefault();
+
+                            if (confirm("Tem certeza que deseja excluir este funcionário?")) {
+                                deletarPerfilFuncionario(dados_get.id);
+                            }
+                        }
+
+                        btnCadastroPerfil.onclick = function (event) {
+                            event.preventDefault();
+                            cadastroPerfilFuncionario(dados_get.id);
+
+                        }
+
+                        btnAtualizarPerfil.onclick = function (event) {
+                            event.preventDefault();
+                            atualizarPerfilFuncionario(dados_get.id);
+
+                        }
+
+                    }
 
                 });
 
@@ -398,12 +541,168 @@
             }
         }
 
+
+
+        function cadastroPerfilFuncionario(id) {
+
+            const telefone = document.getElementById('nomePost').value
+            const endereco = document.getElementById('emailPost').value
+            const genero = document.getElementById('cpfPost').value
+            const idade = document.getElementById('cargoPost').value
+            const estado_civil = document.getElementById('salarioPost').value
+
+
+            const jsonEnvio = {
+                "id": id,
+                "telefone": telefone,
+                "endereco": endereco,
+                "genero": genero,
+                "idade": idade,
+                "estado_civil": estado_civil,
+            }
+
+
+            const uri_post_perfil = `/perfis/`;
+            fetch(uri_post_perfil, {
+                method: "POST",
+                body: JSON.stringify(jsonEnvio),
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    //"Authorization":'Bearer ' + objUsuario.token
+                }
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                console.log(data)
+                if (data.status == false) {
+                    let txt = data.msg
+                    mensage_error_perfilCadastro.textContent = txt
+                    mensage_error_perfilCadastro.style.display = "block";
+                    return;
+                } else {
+                    mensage_error_perfilCadastro.style.display = "none";
+
+                    btnCadastroPerfil.textContent = "Atualizado!";
+                    btnCadastroPerfil.classList.add("sucesso");
+                    setTimeout(() => {
+                        btnCadastroPerfil.textContent = "Atualizar";
+                        btnCadastroPerfil.classList.remove("sucesso");
+                    }, 2000); // 2000 milissegundos = 2 segundos               
+                }
+
+            }).catch((error) => {
+                console.error("Error:", error);
+            })
+        }
+
+
+
+
+        function atualizarPerfilFuncionario(id) {
+
+            const telefone = document.getElementById('nomePost').value
+            const endereco = document.getElementById('emailPost').value
+            const genero = document.getElementById('cpfPost').value
+            const idade = document.getElementById('cargoPost').value
+            const estado_civil = document.getElementById('salarioPost').value
+
+
+            const jsonEnvio = {
+                "id": id,
+                "telefone": telefone,
+                "endereco": endereco,
+                "genero": genero,
+                "idade": idade,
+                "estado_civil": estado_civil,
+            }
+
+
+            const uri_post_perfil = `/perfis/${id}`;
+            fetch(uri_post_perfil, {
+                method: "PUT",
+                body: JSON.stringify(jsonEnvio),
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    //"Authorization":'Bearer ' + objUsuario.token
+                }
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                console.log(data)
+                if (data.status == false) {
+                    let txt = data.msg
+                    mensage_error_perfil.textContent = txt
+                    mensage_error_perfil.style.display = "block";
+                    return;
+                } else {
+                    mensage_error_perfil.style.display = "none";
+
+                    btnAtualizarPerfil.textContent = "Atualizado!";
+                    btnAtualizarPerfil.classList.add("sucesso");
+                    setTimeout(() => {
+                        btnAtualizarPerfil.textContent = "Atualizar";
+                        btnAtualizarPerfil.classList.remove("sucesso");
+                    }, 2000); // 2000 milissegundos = 2 segundos               
+                }
+
+            }).catch((error) => {
+                console.error("Error:", error);
+            })
+        }
+
+
+        function deletarPerfilFuncionario(id) {
+            const uri_delete_funcionarios_arquivo = `/perfil/${id}`;
+
+            fetch(uri_delete_funcionarios_arquivo, {
+                method: "DELETE",
+            }).then(res => res.json())
+                .then(data => {
+                    if (data.status == false) {
+                        alert("Erro ao deletar");
+                        return
+                    } else {
+                        alert("Perfil deletado com sucesso!");
+                        location.reload();
+                    }
+                }).catch(err => {
+                    alert("Erro ao enviar arquivo.");
+                    console.error(err);
+                });
+
+        }
+
+
+        function deletarFuncionario() {
+            const uri_delete_funcionarios_arquivo = `/funcionarios/${id}`;
+
+            fetch(uri_delete_funcionarios_arquivo, {
+                method: "DELETE",
+            }).then(res => res.json())
+                .then(data => {
+                    if (data.status == false) {
+                        alert("Erro ao deletar");
+                        return
+                    } else {
+                        alert("Funcionário deletado com sucesso!");
+                        location.reload();
+                    }
+                }).catch(err => {
+                    alert("Erro ao enviar arquivo.");
+                    console.error(err);
+                });
+
+        }
         const formUploadArquivo = document.getElementById("formUploadArquivo");
 
         formUploadArquivo.addEventListener("submit", function (e) {
             e.preventDefault(); // Impede recarregamento automático
             cadastro_funcionario_arquivo();
         });
+
+
 
 
 
