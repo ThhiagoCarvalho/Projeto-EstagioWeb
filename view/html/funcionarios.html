@@ -270,8 +270,6 @@
                                                 id="botaoCadastrarPerfil">Cadastrar</button>
                                             <button type="submit" class="btn btn-primary"
                                                 id="botaoAtualizarPerfil">Atualizar</button>
-                                            <button type="button" class="btn btn-danger"
-                                                id="botaoDeletarPerfil">Deletar</button>
                                         </div>
 
                                     </div>
@@ -360,7 +358,6 @@
 
         const btnCadastroPerfil = document.getElementById("botaoCadastrarPerfil")
         const btnAtualizarPerfil = document.getElementById("botaoAtualizarPerfil")
-        const btnDeletarPerfil = document.getElementById("botaoDeletarPerfil")
 
         const mensage_error_perfilCadastro = document.getElementById("error-message-perfilCadastro");
         const mensage_error_perfil = document.getElementById("error-message-perfil");
@@ -488,7 +485,6 @@
 
                                     // Mostrar botões Atualizar e Deletar, esconder Cadastrar
                                     btnAtualizarPerfil.style.display = "inline-block";
-                                    btnDeletarPerfil.style.display = "inline-block";
                                     btnCadastroPerfil.style.display = "none";
                                 } else {
                                     // Limpa campos e prepara para novo cadastro
@@ -500,7 +496,6 @@
 
                                     // Mostrar botão Cadastrar, esconder os outros
                                     btnAtualizarPerfil.style.display = "none";
-                                    btnDeletarPerfil.style.display = "none";
                                     btnCadastroPerfil.style.display = "inline-block";
                                 }
 
@@ -512,13 +507,6 @@
                                 console.error(err);
                             });
 
-                        btnDeletarPerfil.onclick = function (event) {
-                            event.preventDefault();
-
-                            if (confirm("Tem certeza que deseja excluir este funcionário?")) {
-                                deletarPerfilFuncionario(dados_get.id);
-                            }
-                        }
 
                         btnCadastroPerfil.onclick = function (event) {
                             event.preventDefault();
@@ -545,15 +533,15 @@
 
         function cadastroPerfilFuncionario(id) {
 
-            const telefone = document.getElementById('nomePost').value
-            const endereco = document.getElementById('emailPost').value
-            const genero = document.getElementById('cpfPost').value
-            const idade = document.getElementById('cargoPost').value
-            const estado_civil = document.getElementById('salarioPost').value
+            const telefone = document.getElementById('telefone').value
+            const endereco = document.getElementById('endereco').value
+            const genero = document.getElementById('genero').value
+            const idade = document.getElementById('idade').value
+            const estado_civil = document.getElementById('estado_civil').value
 
 
             const jsonEnvio = {
-                "id": id,
+                "usuario_logado": id,
                 "telefone": telefone,
                 "endereco": endereco,
                 "genero": genero,
@@ -601,15 +589,15 @@
 
         function atualizarPerfilFuncionario(id) {
 
-            const telefone = document.getElementById('nomePost').value
-            const endereco = document.getElementById('emailPost').value
-            const genero = document.getElementById('cpfPost').value
-            const idade = document.getElementById('cargoPost').value
-            const estado_civil = document.getElementById('salarioPost').value
+            const telefone = document.getElementById('telefone').value
+            const endereco = document.getElementById('endereco').value
+            const genero = document.getElementById('genero').value
+            const idade = document.getElementById('idade').value
+            const estado_civil = document.getElementById('estado_civil').value
 
 
             const jsonEnvio = {
-                "id": id,
+                "usuario_logado": id,
                 "telefone": telefone,
                 "endereco": endereco,
                 "genero": genero,
