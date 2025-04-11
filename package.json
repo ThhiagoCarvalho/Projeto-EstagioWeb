@@ -12,6 +12,8 @@
   "author": "Thiago Cesar",
   "license": "ISC",
   "dependencies": {
+    "axie": "^2.0.3",
+    "axios": "^1.8.4",
     "csv-parse": "^5.6.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",

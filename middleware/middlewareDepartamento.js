@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { parse } = require('csv-parse/sync');
 const Departamento = require('../modelo/Departamento');
-
+const axios = require('axios');
 const upload = multer({ dest: 'uploads/' });
 
 module.exports = class MiddlewareDepartamento {
@@ -79,19 +79,28 @@ module.exports = class MiddlewareDepartamento {
         next();
     };
 
-    validar_localizacao = (req, res, next) => {
-        const departamentos = this.normalizarDepartamentos(req.body);
+
+
+
+     validar_localizacao = async (req, res, next) => {
+        // ..
+            const departamentos = this.normalizarDepartamentos(req.body);
         for (let i = 0; i < departamentos.length; i++) {
-            const localizacao = departamentos[i]?.localizacao?.trim();
+
+            let cep =  departamentos[i]?.localizacao?.trim();
+            cep = cep.replace(/\D/g, '');
+    
+            const resposta = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+
             const identificador = departamentos.length === 1 ? '' : `do departamento ${i + 1}`;
 
-            if (!localizacao || localizacao.length < 3) {
+            if (resposta.data.erro) {
                 return res.status(400).json({
-                    cod: 3,
-                    status: false,
-                    msg: `A localização ${identificador || 'informada'} é inválida.`,
+                  cod: 3,
+                  status: false,
+                  msg: `O cep ${identificador || 'informada'} é inválida.`,
                 });
-            }
+              }
         }
         next();
     };

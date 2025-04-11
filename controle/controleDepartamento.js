@@ -1,12 +1,13 @@
+console.log("OI")
 const express = require('express');
 const Departamento = require("../modelo/Departamento");
 const fs = require('fs');
 const readline = require('readline');
 const multer = require('multer');
 const TokenJWT = require("../modelo/TokenJWT")
-
-
+const axios = require('axios');
 const upload = multer({ dest: 'uploads/' }); // Diretório temporário para arquivos
+console.log("OI")
 
 module.exports = class controlDepartamento {
 
@@ -26,6 +27,7 @@ module.exports = class controlDepartamento {
         departamento.orcamento = dados.orcamento;
         departamento.localizacao = dados.localizacao;
         departamento.data_criacao = dados.data_criacao;
+
 
         const existeDepartamento = await departamento.verificarExistencia();
         if (!existeDepartamento) {
@@ -52,15 +54,24 @@ module.exports = class controlDepartamento {
 
 
   async controle_departamento_post(request, response) {
+
     const nome = request.body.nome;
     const orcamento = request.body.orcamento;
-    const localizacao = request.body.localizacao;
     const data_criacao = request.body.data_criacao;
+
+    let localizacao = request.body.localizacao;
+    localizacao = localizacao.replace(/\D/g, '');
+    const resposta = await axios.get(`https://viacep.com.br/ws/${localizacao}/json/`);
+
+
+    const endereco = resposta.data;
+    const enderecoCompleto = `${endereco.logradouro}, ${endereco.bairro}, ${endereco.localidade} - ${endereco.uf}, CEP: ${endereco.cep}`;
+
 
     const departamento = new Departamento();
     departamento.nome = nome;
     departamento.orcamento = orcamento;
-    departamento.localizacao = localizacao;
+    departamento.localizacao = enderecoCompleto;
     departamento.data_criacao = data_criacao;
 
     const departamentoCriado = await departamento.post_departamento();

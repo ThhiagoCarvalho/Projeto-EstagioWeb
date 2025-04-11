@@ -78,6 +78,7 @@ module.exports = class MiddlewareFuncionario {
         }
         next();
     }
+
     validar_cpf = (req, res, next) => {
         const funcionarios = this.normalizarFuncionarios(req.body);
         const regexCPF = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
