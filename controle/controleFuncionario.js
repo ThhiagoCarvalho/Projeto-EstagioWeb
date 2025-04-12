@@ -164,4 +164,40 @@ module.exports = class controlFuncionario {
     response.status(200).send(objResposta);
   }
 
+  async controle_funcionario_dadosRelatorio(req, res) {
+    try {
+      const funcionario = new Funcionario();
+
+      const totalFuncionarios = await funcionario.totalFuncionariosAtivos();
+      const funcionariosCargo = await funcionario.funcionariosPorCargo();
+      const proporcaoGenero = await funcionario.proporcaoGenero();
+      const mediaSalarial = await funcionario.mediaSalarialGeral();
+      const distribuicaoSalarial = await funcionario.distribuicaoSalarialPorDepartamento();
+      const idadePorDepartamento = await funcionario.idadeMediaPorDepartamento();
+
+      const objResposta = {
+        cod: 7,
+        status: true,
+        relatorio: {
+          total_funcionarios: totalFuncionarios,
+          funcionarios_por_cargo: funcionariosCargo,
+          proporcao_genero: proporcaoGenero,
+          media_salarial_geral: mediaSalarial,
+          distribuicao_salarial_departamento: distribuicaoSalarial,
+          idade_media_departamento: idadePorDepartamento
+        },
+        msg: "Relatório estatístico de funcionários gerado com sucesso."
+      };
+
+      res.status(200).send(objResposta);
+    } catch (error) {
+      console.error("Erro ao gerar relatório:", error);
+      res.status(500).send({
+        cod: 0,
+        status: false,
+        msg: "Erro ao gerar relatório de funcionários."
+      });
+    }
+  }
+
 }

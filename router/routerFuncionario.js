@@ -75,6 +75,10 @@ module.exports = class RouterFuncionario {
             this._controleFuncionario.controle_funcionario_login
         )
     
+
+        this._router.get('/relatorio',
+            this._controleFuncionario.controle_funcionario_dadosRelatorio
+        );
         return this._router
 
     }
