@@ -9,7 +9,7 @@ module.exports = class Perfis {
         this._telefone = "";
         this._genero = "";
         this._estado_civil = "";
-        this.usuario_logado = "";
+        this._usuario_logado = "";
     }
 
     async post_perfil() {
@@ -24,6 +24,7 @@ module.exports = class Perfis {
             const usuario = this.usuario_logado;
             const id = this._id;
 
+    
 
             return result.affectedRows > 0;
         } catch (error) {
@@ -35,20 +36,20 @@ module.exports = class Perfis {
     async get_perfil_by_id() {
         const conexao = Banco.getConexao();
         const sql = "SELECT * FROM perfis WHERE funcionario_id = ?";
-
+        console.log(this._usuario_logado)
         try {
-            const [result] = await conexao.promise().execute(sql, [this.funcionario_id]);
+            const [result] = await conexao.promise().execute(sql, [this._usuario_logado]);
 
-            if (result.length === 1) {
                 return result;
-            }
+            
 
-            return false;
         } catch (error) {
             console.log("Erro ao buscar perfil por ID >>>", error);
             return false;
         }
     }
+
+
 
     async put_perfil() {
         const conexao = Banco.getConexao();
@@ -160,6 +161,14 @@ module.exports = class Perfis {
     }
     set id(valor) {
         this._id = valor;
+    }
+
+
+    get idFuncionario() {
+        return this._usuario_logado;
+    }
+    set idFuncionario(valor) {
+        this._usuario_logado = valor;
     }
 
 }

@@ -107,7 +107,7 @@ module.exports = class Funcionario {
     const itensPorPagina = 10;
     const inicio = (parseInt(pagina) - 1) * itensPorPagina;
     const conexao = Banco.getConexao()
-    const sql = "SELECT * from funcionarios ";
+    const sql = "SELECT * from funcionarios order by funcionarios.email  ASC";
     try {
       const [result] = await conexao.promise().execute(sql,[inicio,parseInt(itensPorPagina)])
       return result;

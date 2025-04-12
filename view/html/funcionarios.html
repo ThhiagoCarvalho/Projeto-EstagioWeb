@@ -42,7 +42,7 @@
                     </button>
                     <nav>
                         <ul>
-                            <li><a href="#">Home</a></li>
+                            <li><a href="./home4.html">Home</a></li>
                             <li><a href="./grafico.html">Graficos</a></li>
 
                             <li class="submenu">
@@ -82,40 +82,7 @@
                 <div class="container">
 
                     <div class="container mt-4">
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <label for="filtroDepartamento" class="form-label">Departamento</label>
-                                <select id="filtroDepartamento" class="form-select">
-                                    <option value="">Nenhum</option>
-                                    <option value="Tecnologista">Tecnologista</option>
-                                    <option value="Marketing">Marketing</option>
-                                    <option value="RH">RH</option>
-                                    <option value="Financeiro">Financeiro</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="filtroCargo" class="form-label">Cargo</label>
-                                <select id="filtroCargo" class="form-select">
-                                    <option value="">Nenhum</option>
-                                    <option value="Tecnologista">Tecnologista</option>
-                                    <option value="Marketing">Marketing</option>
-                                    <option value="RH">RH</option>
-                                    <option value="Financeiro">Financeiro</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="filtroSalario" class="form-label">Salário</label>
-                                <select id="filtroSalario" class="form-select">
-                                    <option value="">Nenhum</option>
-                                    <option value="3000">Até R$ 3.000</option>
-                                    <option value="6000">Até R$ 6.000</option>
-                                    <option value="12000">Até R$ 12.000</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3 d-flex align-items-end">
-                                <button id="btnAplicarFiltros" class="btn btn-primary w-100">Aplicar Filtros</button>
-                            </div>
-                        </div>
+                        <h2>Listagem dos funcionarios</h2>
                         <table id="TabelaGetOpcao" class="table table-striped table-hover">
                             <thead>
                                 <tr>
@@ -236,26 +203,28 @@
                                     </div>
                                     <div class="modal-body">
                                         <input type="hidden" id="id">
+                                        <input type="hidden" id="perfil_id">
+
                                         <div class="row g-2">
                                             <div class="col-md-6">
-                                                <input type="text" id="telefone" class="form-control" placeholder="Nome"
-                                                    required>
+                                                <input type="text" id="telefone" class="form-control"
+                                                    placeholder="telefone" required>
                                             </div>
                                             <div class="col-md-6">
                                                 <input type="email" id="endereco" class="form-control"
-                                                    placeholder="Email" required>
+                                                    placeholder="email" required>
                                             </div>
                                             <div class="col-md-4 mt-2">
-                                                <input type="text" id="genero" class="form-control" placeholder="CPF"
+                                                <input type="text" id="genero" class="form-control" placeholder="genero"
                                                     required>
                                             </div>
                                             <div class="col-md-4 mt-2">
-                                                <input type="text" id="idade" class="form-control" placeholder="Cargo"
+                                                <input type="text" id="idade" class="form-control" placeholder="idade"
                                                     required>
                                             </div>
                                             <div class="col-md-4 mt-2">
-                                                <input type="number" id="estado_civil" class="form-control"
-                                                    placeholder="Salário" required>
+                                                <input type="text" id="estado_civil" class="form-control"
+                                                    placeholder="estado_civil" required>
                                             </div>
                                             <div id="error-message-perfilCadastro" class="text-danger mt-2"
                                                 style="display: none;"></div>
@@ -466,33 +435,36 @@
 
                     btnVisualizarPeril.onclick = function (event) {
                         event.preventDefault();
-
-                        fetch(`/perfil/${dados_get.id}`)
+                        fetch(`/perfis/${dados_get.id}`)
                             .then(res => res.json())
                             .then(data => {
-                                const temPerfil = data && data.status !== false && data.perfil;
-
-                                // Preencher ID oculto
-                                document.getElementById("id").value = dados_get.id;
+                                const temPerfil = data && data.status !== false && Array.isArray(data.dados) && data.dados.length > 0;
 
                                 if (temPerfil) {
-                                    // Preenche os dados no formulário
-                                    document.getElementById("telefone").value = data.perfil.telefone || "";
-                                    document.getElementById("endereco").value = data.perfil.endereco || "";
-                                    document.getElementById("genero").value = data.perfil.genero || "";
-                                    document.getElementById("idade").value = data.perfil.idade || "";
-                                    document.getElementById("estado_civil").value = data.perfil.estado_civil || "";
+                                    const perfil = data.dados[0]
+                                    document.getElementById("perfil_id").value = perfil.id;
+                                    document.getElementById("id").value = perfil.funcionario_id;
 
-                                    // Mostrar botões Atualizar e Deletar, esconder Cadastrar
+                                    document.getElementById("telefone").value = perfil.telefone || "";
+                                    document.getElementById("endereco").value = perfil.endereco || "";
+                                    document.getElementById("genero").value = perfil.genero || "";
+                                    document.getElementById("idade").value = perfil.idade || "";
+                                    document.getElementById("estado_civil").value = perfil.estado_civil || "";
+
                                     btnAtualizarPerfil.style.display = "inline-block";
                                     btnCadastroPerfil.style.display = "none";
                                 } else {
-                                    // Limpa campos e prepara para novo cadastro
+
+                                    // Nenhum perfil encontrado – preparar para cadastrar novo
+                                    document.getElementById("perfil_id").value = "";
+                                    document.getElementById("id").value = dados_get.id;
+
                                     document.getElementById("telefone").value = "";
                                     document.getElementById("endereco").value = "";
                                     document.getElementById("genero").value = "";
                                     document.getElementById("idade").value = "";
                                     document.getElementById("estado_civil").value = "";
+
 
                                     // Mostrar botão Cadastrar, esconder os outros
                                     btnAtualizarPerfil.style.display = "none";
@@ -507,19 +479,6 @@
                                 console.error(err);
                             });
 
-
-                        btnCadastroPerfil.onclick = function (event) {
-                            event.preventDefault();
-                            cadastroPerfilFuncionario(dados_get.id);
-
-                        }
-
-                        btnAtualizarPerfil.onclick = function (event) {
-                            event.preventDefault();
-                            atualizarPerfilFuncionario(dados_get.id);
-
-                        }
-
                     }
 
                 });
@@ -530,8 +489,20 @@
         }
 
 
+        document.getElementById("botaoCadastrarPerfil").addEventListener("click", function (event) {
+            event.preventDefault();
+            const funcionario_id = document.getElementById("id").value;
+            cadastroPerfilFuncionario(funcionario_id);
+        });
 
-        function cadastroPerfilFuncionario(id) {
+        document.getElementById("botaoAtualizarPerfil").addEventListener("click", function (event) {
+            event.preventDefault();
+            const funcionario_id = document.getElementById("id").value;
+            atualizarPerfilFuncionario(funcionario_id);
+        });
+
+
+        function cadastroPerfilFuncionario(funcionario_id) {
 
             const telefone = document.getElementById('telefone').value
             const endereco = document.getElementById('endereco').value
@@ -541,7 +512,7 @@
 
 
             const jsonEnvio = {
-                "usuario_logado": id,
+                "usuario_logado": funcionario_id,
                 "telefone": telefone,
                 "endereco": endereco,
                 "genero": genero,
@@ -587,7 +558,8 @@
 
 
 
-        function atualizarPerfilFuncionario(id) {
+        function atualizarPerfilFuncionario(funcionario_id) {
+            const perfil_id = document.getElementById("perfil_id").value;
 
             const telefone = document.getElementById('telefone').value
             const endereco = document.getElementById('endereco').value
@@ -597,7 +569,8 @@
 
 
             const jsonEnvio = {
-                "usuario_logado": id,
+                "id": perfil_id, // ID do perfil
+                "usuario_logado": funcionario_id,
                 "telefone": telefone,
                 "endereco": endereco,
                 "genero": genero,
@@ -606,7 +579,7 @@
             }
 
 
-            const uri_post_perfil = `/perfis/${id}`;
+            const uri_put_perfil = `/perfis/${perfil_id}`;
             fetch(uri_post_perfil, {
                 method: "PUT",
                 body: JSON.stringify(jsonEnvio),
@@ -640,27 +613,6 @@
             })
         }
 
-
-        function deletarPerfilFuncionario(id) {
-            const uri_delete_funcionarios_arquivo = `/perfil/${id}`;
-
-            fetch(uri_delete_funcionarios_arquivo, {
-                method: "DELETE",
-            }).then(res => res.json())
-                .then(data => {
-                    if (data.status == false) {
-                        alert("Erro ao deletar");
-                        return
-                    } else {
-                        alert("Perfil deletado com sucesso!");
-                        location.reload();
-                    }
-                }).catch(err => {
-                    alert("Erro ao enviar arquivo.");
-                    console.error(err);
-                });
-
-        }
 
 
         function deletarFuncionario() {
@@ -844,11 +796,11 @@
                         mensage_error.textContent = txt
                         mensage_error.style.display = "block";
                     } else {
-                        btnAtualizarFuncionario.textContent = "Atualizado!";
-                        btnAtualizarFuncionario.classList.add("sucesso");
+                        botaoAtualizar.textContent = "Atualizado!";
+                        botaoAtualizar.classList.add("sucesso");
                         setTimeout(() => {
-                            btnAtualizarFuncionario.textContent = "Atualizar";
-                            btnAtualizarFuncionario.classList.remove("sucesso");
+                            botaoAtualizar.textContent = "Atualizar";
+                            botaoAtualizar.classList.remove("sucesso");
                         }, 2000); // 2000 milissegundos = 2 segundos               
                     }
 
@@ -858,23 +810,6 @@
             }
         }
 
-
-        document.getElementById("btnAplicarFiltros").addEventListener("click", function () {
-            const cargoSelecionado = document.getElementById("filtroCargo").value;
-            const salarioSelecionado = document.getElementById("filtroSalario").value;
-
-            let filtrados = funcionariosOriginais;
-
-            if (cargoSelecionado) {
-                filtrados = filtrados.filter(f => f.cargo.toLowerCase() === cargoSelecionado.toLowerCase());
-            }
-
-            if (salarioSelecionado) {
-                filtrados = filtrados.filter(f => Number(f.salario) <= Number(salarioSelecionado));
-            }
-
-            montarTabelaOpcao({ status: true, dados: filtrados });
-        });
 
 
         btnAnimar.addEventListener('click', animarMenu)

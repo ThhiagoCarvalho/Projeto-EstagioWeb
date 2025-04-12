@@ -37,9 +37,10 @@ module.exports = class ControlPerfil {
 
     async controle_perfil_get(req, res) {
         const id = req.params.id;
-    
+        console.log(id)
+
         const perfil = new Perfil();
-        perfil.funcionario_id = id;
+        perfil.idFuncionario = id;
     
         const resultado = await perfil.get_perfil_by_id();
     
@@ -67,7 +68,7 @@ module.exports = class ControlPerfil {
         perfil.endereco = enderecoCompleto;
         perfil.genero = req.body.genero;
         perfil.estado_civil = req.body.estado_civil;
-        perfil.usuario_logado = req.params.id;
+        perfil.id = req.params.id;
 
         const atualizado = await perfil.put_perfil();
 
