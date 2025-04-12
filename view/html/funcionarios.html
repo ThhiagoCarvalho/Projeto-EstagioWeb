@@ -211,8 +211,8 @@
                                                     placeholder="telefone" required>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="email" id="endereco" class="form-control"
-                                                    placeholder="email" required>
+                                                <input type="cep" id="endereco" class="form-control"
+                                                    placeholder="cep" required>
                                             </div>
                                             <div class="col-md-4 mt-2">
                                                 <input type="text" id="genero" class="form-control" placeholder="genero"
@@ -567,9 +567,9 @@
             const idade = document.getElementById('idade').value
             const estado_civil = document.getElementById('estado_civil').value
 
-
+            console.log("funcionario_id"+ funcionario_id)
+            console.log(perfil_id)
             const jsonEnvio = {
-                "id": perfil_id, // ID do perfil
                 "usuario_logado": funcionario_id,
                 "telefone": telefone,
                 "endereco": endereco,
@@ -580,7 +580,7 @@
 
 
             const uri_put_perfil = `/perfis/${perfil_id}`;
-            fetch(uri_post_perfil, {
+            fetch(uri_put_perfil, {
                 method: "PUT",
                 body: JSON.stringify(jsonEnvio),
                 headers: {
@@ -615,7 +615,7 @@
 
 
 
-        function deletarFuncionario() {
+        function deletarFuncionario(id) {
             const uri_delete_funcionarios_arquivo = `/funcionarios/${id}`;
 
             fetch(uri_delete_funcionarios_arquivo, {

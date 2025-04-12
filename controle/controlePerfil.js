@@ -62,6 +62,7 @@ module.exports = class ControlPerfil {
         const endereco = resposta.data;
         const enderecoCompleto = `${endereco.logradouro}, ${endereco.bairro}, ${endereco.localidade} - ${endereco.uf}, CEP: ${endereco.cep}`;
 
+
         const perfil = new Perfil();
         perfil.idade = req.body.idade;
         perfil.telefone = req.body.telefone;
@@ -69,7 +70,7 @@ module.exports = class ControlPerfil {
         perfil.genero = req.body.genero;
         perfil.estado_civil = req.body.estado_civil;
         perfil.id = req.params.id;
-
+        perfil.idFuncionario = req.body.usuario_logado
         const atualizado = await perfil.put_perfil();
 
         const objResposta = {

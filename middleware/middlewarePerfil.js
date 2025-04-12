@@ -100,16 +100,27 @@ module.exports = class MiddlewarePerfil {
         }
         next();
     }
+
+    validarEmail  = (req, res, next) => {
+
+        const telefone = req.body.telefone;
+        if (!telefone || !/^\d{10,11}$/.test(telefone)) {
+            return res.status(400).json({
+                cod: 2,
+                status: false,
+                msg: `O telefone é inválido. Deve conter apenas números e ter entre 10 e 11 dígitos.`,
+            });
+
+        }
+        next();
+    }
     verificarPerfilExiste = async (req, res, next) => {
 
-        const id = req.params.usuario_logado;
-        const perfil = new Perfil();
-        perfil.usuario_logado = id;
-        const rows = await perfil.get_perfil_by_usuario_logado();
-        if (rows) {
-            return res.status(400).json({
-                msg: "O usuario Ja tem Perfil",
-                dados: rows,
+        const email = req.params.email;
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !regexEmail.test(email)) {
+                return res.status(400).json({
+                msg: "O email e invalido",
                 status: false
             });
 

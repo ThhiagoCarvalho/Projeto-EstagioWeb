@@ -156,12 +156,19 @@ module.exports = class controlFuncionario {
     funcionario.id = id
     const resultadofuncionario = await funcionario.delete();
 
-    const objResposta = {
+    if (resultadofuncionario && resultadofuncionario.sucesso === false) {
+      return response.status(400).send({
+        cod: 0,
+        status: false,
+        msg: resultadofuncionario.mensagem
+      });
+    }
+
+    return response.status(200).send({
       cod: 1,
       status: true,
-      msg: resultadofuncionario ? "deletado com sucesso!" : "Erro ao deletar"
-    };
-    response.status(200).send(objResposta);
+      msg: "Funcionário deletado com sucesso!"
+    });
   }
 
   async controle_funcionario_dadosRelatorio(req, res) {

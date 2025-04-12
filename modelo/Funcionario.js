@@ -118,16 +118,24 @@ module.exports = class Funcionario {
   }
 
   async delete() {
-    const conexao = Banco.getConexao()
-    const sql = "delete from funcionarios where id = ?";
+    const conexao = Banco.getConexao();
+    const sql = "DELETE FROM funcionarios WHERE id = ?";
     try {
-      const [result] = await conexao.promise().execute(sql, [this.id])
+      const [result] = await conexao.promise().execute(sql, [this.id]);
       return result;
     } catch (error) {
-      console.log("Errro >>>", error)
-      return false
+      console.log("Erro >>>", error);
+  
+      if (error.code === 'ER_ROW_IS_REFERENCED_2' || error.errno === 1451) {
+        // MySQL: código de erro 1451 → restrição de chave estrangeira
+        return {
+          sucesso: false,
+          mensagem: "Não é possível excluir: este funcionário está vinculado a um perfil ou outro registro."
+        };
+      }
     }
   }
+  
 
 
   async mediaSalarialGeral() {

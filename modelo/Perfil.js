@@ -54,7 +54,7 @@ module.exports = class Perfis {
     async put_perfil() {
         const conexao = Banco.getConexao();
 
-        const perfilAtual = await this.validarId(this.usuario_logado);
+        const perfilAtual = await this.validarId(this._usuario_logado);
         if (!perfilAtual) {
             return false;
         }
