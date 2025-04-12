@@ -44,7 +44,7 @@ module.exports = class RouterDepartamento {
             this._controleDepartamento.controle_departamento_delete
         )
 
-        this._router.post ('/csv' ,
+        this._router.post ('/upload' ,
             this._middlewareDepartamento.uploadJSON,
             this._middlewareDepartamento.validar_nome,
             this._middlewareDepartamento.validar_orcamento,

@@ -338,7 +338,7 @@
 
 
 
-        function deletarDepartamento() {
+        function deletarDepartamento(id) {
             const uri_delete_departamentos_arquivo = `/departamentos/${id}`;
 
             fetch(uri_delete_departamentos_arquivo, {
@@ -346,8 +346,9 @@
             }).then(res => res.json())
                 .then(data => {
                     if (data.status == false) {
+                        console.log(data)
                         alert("Erro ao deletar");
-                        return
+                        return;
                     } else {
                         alert("departamento deletado com sucesso!");
                         location.reload();
@@ -405,6 +406,8 @@
 
 
         botaoCadastro.onclick = function () {
+            event.preventDefault(); // impede o comportamento padrão
+
             cadastro_departamentos()
         }
         function cadastro_departamentos() {
@@ -418,7 +421,7 @@
                 "nome": nome,
                 "orcamento": orcamento,
                 "localizacao": localizacao,
-                "dataCriacao": dataCriacao,
+                "data_criacao": dataCriacao,
             }
 
 
@@ -443,10 +446,10 @@
                 } else {
                     mensage_error_post.style.display = "none";
 
-                    botaoCadastro.textContent = "Atualizado!";
+                    botaoCadastro.textContent = "Cadastrado!";
                     botaoCadastro.classList.add("sucesso");
                     setTimeout(() => {
-                        botaoCadastro.textContent = "Atualizar";
+                        botaoCadastro.textContent = "Cadastrar";
                         botaoCadastro.classList.remove("sucesso");
                     }, 2000); // 2000 milissegundos = 2 segundos               
                 }
@@ -459,64 +462,57 @@
 
 
         botaoAtualizar.onclick = function () {
+            event.preventDefault(); // impede o comportamento padrão
+
             update_departamento()
         }
         function update_departamento() {
             const id = document.getElementById('id').value
-            const nome = document.getElementById('nomePost').value;
-            const orcamento = document.getElementById('orcamentoPost').value;
-            const localizacao = document.getElementById('localizacaoPost').value;
-            const dataCriacao = document.getElementById('dataCriacaoPost').value;
+            const nome = document.getElementById('nome').value;
+            const orcamento = document.getElementById('orcamento').value;
+            const localizacao = document.getElementById('localizacao').value;
+            const dataCriacao = document.getElementById('data_criacao').value;
 
-            if (!id || !nome || !orcamento || !localizacao || !dataCriacao) {
-                let text = "Preencha todos os campos"
-                mensage_error.textContent = text
-                mensage_error.style.display = "block";
-                return;
+            mensage_error.style.display = "none";
+            const jsonEnvio = {
+                "nome": nome,
+                "orcamento": orcamento,
+                "localizacao": localizacao,
+                "data_criacao": dataCriacao,
+            }
 
 
-            } else {
-                mensage_error.style.display = "none";
-                const jsonEnvio = {
-                    "id": id,
-                    "nome": nome,
-                    "orcamento": orcamento,
-                    "localizacao": localizacao,
-                    "dataCriacao": dataCriacao,
+            const uri_update_departamentos = `/departamentos/${id}`;
+            fetch(uri_update_departamentos, {
+                method: "PUT",
+                body: JSON.stringify(jsonEnvio),
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    //"Authorization":'Bearer ' + objUsuario.token
+                }
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                console.log(data)
+
+                if (data.status == false) {
+                    let txt = data.msg
+                    mensage_error.textContent = txt
+                    mensage_error.style.display = "block";
+                } else {
+                    botaoAtualizar.textContent = "Atualizado!";
+                    botaoAtualizar.classList.add("sucesso");
+                    setTimeout(() => {
+                        botaoAtualizar.textContent = "Atualizar";
+                        botaoAtualizar.classList.remove("sucesso");
+                    }, 2000); // 2000 milissegundos = 2 segundos               
                 }
 
+            }).catch((error) => {
+                console.error("Error:", error);
+            })
 
-                const uri_update_departamentos = `/departamentos/${id}`;
-                fetch(uri_update_departamentos, {
-                    method: "PUT",
-                    body: JSON.stringify(jsonEnvio),
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json",
-                        //"Authorization":'Bearer ' + objUsuario.token
-                    }
-                }).then((response) => {
-                    return response.json();
-                }).then((data) => {
-                    console.log(data)
-
-                    if (data.status == false) {
-                        let txt = data.msg
-                        mensage_error.textContent = txt
-                        mensage_error.style.display = "block";
-                    } else {
-                        botaoAtualizar.textContent = "Atualizado!";
-                        botaoAtualizar.classList.add("sucesso");
-                        setTimeout(() => {
-                            botaoAtualizar.textContent = "Atualizar";
-                            botaoAtualizar.classList.remove("sucesso");
-                        }, 2000); // 2000 milissegundos = 2 segundos               
-                    }
-
-                }).catch((error) => {
-                    console.error("Error:", error);
-                })
-            }
         }
 
 
