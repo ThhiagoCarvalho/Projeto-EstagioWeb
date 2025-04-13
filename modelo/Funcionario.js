@@ -87,14 +87,13 @@ module.exports = class Funcionario {
     console.log(this.email)
     console.log(this.cpf)
     const conexao = Banco.getConexao()
-    const sql = "select count(*) AS qtd,nome,email,cpf from funcionarios where email = ? and cpf = ? and cargo = 'administrador' group by nome,email,cpf"
+    const sql = "select count(*) AS qtd,nome,email,cpf,cargo from funcionarios where email = ? and cpf = ? group by nome,email,cpf,cargo"
     try {
       const [result] = await conexao.promise().execute(sql, [this._email, this.cpf])
       console.log(result)
       if (result.length === 1) {
         const funcionario = result[0];
-        this._nome = funcionario.nome;
-        return true;
+        return funcionario; // <-- retorna o objeto
       }
       return false;
     } catch (error) {

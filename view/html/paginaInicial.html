@@ -50,12 +50,13 @@
                             <li><a href="#">Home</a></li>
                             <li><a href="./grafico.html">Graficos</a></li>
 
-                            <li class="submenu">
+                            <li class="submenu"  id="menuCadastroDesktop">
                                 <a href="#" onclick="toggleSubmenu(event)">Cadastro <i
                                         class="bi bi-caret-down-fill"></i></a>
                                 <ul class="submenu-list">
-                                    <li><a href="./funcionarios.html">Funcionario</a></li>
-                                    <li><a href="./departamentos.html">Departamento</a></li>
+                                    <li><a  href="./funcionarios.html">Funcionario</a></li>
+                                    <li><a  href="./departamentos.html">Departamento</a></li>
+                                    
                                 </ul>
                             </li>
 
@@ -71,12 +72,13 @@
                             <li><a href="#">Home</a></li>
                             <li><a href="./grafico.html">Graficos</a></li>
 
-                            <li class="submenu">
+                            <li class="submenu"  id="menuCadastroMobile">
                                 <a href="#" onclick="toggleSubmenu(event)">Cadastro <i
                                         class="bi bi-caret-down-fill"></i></a>
                                 <ul class="submenu-list">
                                     <li><a href="./funcionarios.html">Funcionario</a></li>
                                     <li><a href="./departamentos.html">Departamento</a></li>
+                                    
                                 </ul>
                             </li>
                         </ul>
@@ -147,7 +149,14 @@
 
     <script>
         const usuario = JSON.parse(localStorage.getItem("Funcionario"));
+    
+        console.log(usuario)
+        console.log(usuario.Usuario)
 
+        if (!usuario || (usuario.Usuario.cargo !== "administrador" && usuario.Usuario.cargo !== "administracao")) {
+            document.getElementById("menuCadastroDesktop").style.display = "none";
+            document.getElementById("menuCadastroMobile").style.display = "none";
+        }
 
 
         /*codigo para o menu do site */
