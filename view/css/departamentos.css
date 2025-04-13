@@ -379,10 +379,12 @@ button.ativo {
     color: white;
     border-color: #50df57;
 }
-
+h2{
+    padding-top: 20px;
+}
 #TabelaGetOpcao {
     width: 75%;
-    
+    margin: auto;
     font-family: Arial, sans-serif;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;

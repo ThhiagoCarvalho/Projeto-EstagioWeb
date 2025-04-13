@@ -137,7 +137,7 @@ module.exports = class controlFuncionario {
 
 
   async controle_funcionario_readPage(request, response) {
-    console.log("Entrou porra getid" )
+    console.log("Entrou porra getid")
 
     const id = parseInt(request.params.id)
     console.log(id)
@@ -180,22 +180,22 @@ module.exports = class controlFuncionario {
 
       const totalFuncionarios = await funcionario.totalFuncionariosAtivos();
       console.log("totalFuncionarios:", totalFuncionarios);
-      
+
       const funcionariosCargo = await funcionario.funcionariosPorCargo();
       console.log("funcionariosCargo:", funcionariosCargo);
-            
+
       const orcamentoTotal = await funcionario.orcamentoTotal();
       console.log("orcamentoTotal:", orcamentoTotal);
-      
+
       const mediaSalarial = await funcionario.mediaSalarialGeral();
       console.log("mediaSalarial:", mediaSalarial);
-      
+
       const distribuicaoSalarial = await funcionario.distribuicaoSalarialPorDepartamento();
       console.log("distribuicaoSalarial:", distribuicaoSalarial);
-      
+
       const idadePorDepartamento = await funcionario.idadeMediaPorDepartamento();
       console.log("idadePorDepartamento:", idadePorDepartamento);
-      
+
       const objResposta = {
         cod: 7,
         status: true,

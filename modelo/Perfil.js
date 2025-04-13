@@ -24,7 +24,7 @@ module.exports = class Perfis {
             const usuario = this.usuario_logado;
             const id = this._id;
 
-    
+
 
             return result.affectedRows > 0;
         } catch (error) {
@@ -40,8 +40,8 @@ module.exports = class Perfis {
         try {
             const [result] = await conexao.promise().execute(sql, [this._usuario_logado]);
 
-                return result;
-            
+            return result;
+
 
         } catch (error) {
             console.log("Erro ao buscar perfil por ID >>>", error);
@@ -79,7 +79,7 @@ module.exports = class Perfis {
             ]);
 
             const usuario = this.usuario_logado;
-        
+
             return result.affectedRows > 0;
         } catch (error) {
             console.log("Erro ao atualizar perfil:", error);
@@ -90,25 +90,25 @@ module.exports = class Perfis {
 
     async validarId(id) {
         const conexao = Banco.getConexao();
-    
+
         try {
             const [rows] = await conexao.promise().execute(
                 "SELECT * FROM perfis WHERE funcionario_id = ?",
                 [id]
             );
-    
+
             if (!rows || rows.length === 0) {
                 console.warn(`Nenhum perfil encontrado para o funcionário com ID: ${id}`);
                 return false;
             }
-    
+
             return rows[0]; // retorna o perfil completo
         } catch (error) {
             console.error("Erro ao validar ID do perfil:", error);
             return false;
         }
     }
-    
+
 
     async get_perfil_by_usuario_logado() {
         const sql = 'SELECT * FROM perfis WHERE funcionario_id = ?';

@@ -187,55 +187,55 @@ module.exports = class MiddlewareFuncionario {
     }
 
 
-validar_funcionario = async (req, res, next) => {
-    const email = req.body.email;
-    const funcionario = new Funcionario();
-    funcionario.email = email;
-    const existe = await funcionario.verificarEmail();
-    if (existe) {
-        return res.status(400).json({
-            msg: "Este email de funcionário já está cadastrado",
-            status: false
-        });
-    }
-    next();
-}
-
-validar_funcionario_logado = async (req, res, next) => {
-    const id = req.params.id;
-    const funcionario = new Funcionario();
-    funcionario.id = id;
-    const resultado = await funcionario.verificarExistencia();
-    if (resultado) {
+    validar_funcionario = async (req, res, next) => {
+        const email = req.body.email;
+        const funcionario = new Funcionario();
+        funcionario.email = email;
+        const existe = await funcionario.verificarEmail();
+        if (existe) {
+            return res.status(400).json({
+                msg: "Este email de funcionário já está cadastrado",
+                status: false
+            });
+        }
         next();
-    } else {
-        return res.status(400).json({
-            msg: "Este funcionário não está cadastrado!",
-            status: false
-        });
     }
-}
 
-validar_funcionario_administrador = async (req, res, next) => {
-    const email = req.body.email;
-    const cpf = req.body.cpf;
-
-    const funcionario = new Funcionario();
-    funcionario.email = email;
-    funcionario.cpf = cpf;
-
-    const resultado = await funcionario.verificarDadosAdmin();
-    console.log("Resultado" + resultado)
-    if (resultado) {
-        req.funcionario = resultado;
-        next();
-    } else {
-        return res.status(400).json({
-            msg: "Este email não está cadastrado como administrador!",
-            status: false
-        });
+    validar_funcionario_logado = async (req, res, next) => {
+        const id = req.params.id;
+        const funcionario = new Funcionario();
+        funcionario.id = id;
+        const resultado = await funcionario.verificarExistencia();
+        if (resultado) {
+            next();
+        } else {
+            return res.status(400).json({
+                msg: "Este funcionário não está cadastrado!",
+                status: false
+            });
+        }
     }
-}
+
+    validar_funcionario_administrador = async (req, res, next) => {
+        const email = req.body.email;
+        const cpf = req.body.cpf;
+
+        const funcionario = new Funcionario();
+        funcionario.email = email;
+        funcionario.cpf = cpf;
+
+        const resultado = await funcionario.verificarDadosAdmin();
+        console.log("Resultado" + resultado)
+        if (resultado) {
+            req.funcionario = resultado;
+            next();
+        } else {
+            return res.status(400).json({
+                msg: "Este email não está cadastrado como administrador!",
+                status: false
+            });
+        }
+    }
 
 
 }

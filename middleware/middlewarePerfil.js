@@ -65,22 +65,22 @@ module.exports = class MiddlewarePerfil {
         }
     }
 
-        validar_autenticacao = async (req, res, next) => {
-            const objToken = new TokenJWT()
-            const headers = req.headers['authorization']; // certo: tudo minúsculo
-            if (objToken.validarToken(headers) == true) {
-                next();
-                return
-            }
-            return res.status(400).json({
-                msg: "Token Invalido",
-                status: false
-            });
+    validar_autenticacao = async (req, res, next) => {
+        const objToken = new TokenJWT()
+        const headers = req.headers['authorization']; // certo: tudo minúsculo
+        if (objToken.validarToken(headers) == true) {
+            next();
+            return
         }
+        return res.status(400).json({
+            msg: "Token Invalido",
+            status: false
+        });
+    }
 
     validarIdade = (req, res, next) => {
         const idade = req.body.idade;
-    
+
         if (
             idade === undefined ||
             idade === null ||
@@ -95,10 +95,10 @@ module.exports = class MiddlewarePerfil {
                 msg: 'A idade do Perfil é inválida. Deve ser um número entre 15 e 80.',
             });
         }
-    
+
         next();
     };
-    
+
 
 
     validarTelefone = (req, res, next) => {
@@ -115,7 +115,7 @@ module.exports = class MiddlewarePerfil {
         next();
     }
 
-    validarEmail  = (req, res, next) => {
+    validarEmail = (req, res, next) => {
 
         const telefone = req.body.telefone;
         if (!telefone || !/^\d{10,11}$/.test(telefone)) {
@@ -133,7 +133,7 @@ module.exports = class MiddlewarePerfil {
         const email = req.params.email;
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email || !regexEmail.test(email)) {
-                return res.status(400).json({
+            return res.status(400).json({
                 msg: "O email e invalido",
                 status: false
             });

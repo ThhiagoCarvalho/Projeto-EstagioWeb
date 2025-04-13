@@ -88,19 +88,19 @@ module.exports = class Departamento {
         const conexao = Banco.getConexao()
         const sql = "select * from departamentos where nome = ?"
         try {
-          const [result] = await conexao.promise().execute(sql, [this._nome])
-          console.log(result)
-          if (result.length > 0) {
-            return true
-          } else {
-            return false;
-          }
+            const [result] = await conexao.promise().execute(sql, [this._nome])
+            console.log(result)
+            if (result.length > 0) {
+                return true
+            } else {
+                return false;
+            }
         } catch (error) {
-          console.log("Errro >>>", error)
-          return false
+            console.log("Errro >>>", error)
+            return false
         }
-      }
-    
+    }
+
 
 
 

@@ -124,7 +124,7 @@ module.exports = class Funcionario {
       return result;
     } catch (error) {
       console.log("Erro >>>", error);
-  
+
       if (error.code === 'ER_ROW_IS_REFERENCED_2' || error.errno === 1451) {
         // MySQL: código de erro 1451 → restrição de chave estrangeira
         return {
@@ -134,7 +134,7 @@ module.exports = class Funcionario {
       }
     }
   }
-  
+
 
 
   async mediaSalarialGeral() {

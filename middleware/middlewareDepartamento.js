@@ -22,9 +22,9 @@ module.exports = class MiddlewareDepartamento {
                         if (ext === '.json') {
                             req.body = JSON.parse(conteudo);
                         } else if (ext === '.csv') {
-                            const registros = parse(conteudo, {  columns: true,  skip_empty_lines: true, trim: true});
+                            const registros = parse(conteudo, { columns: true, skip_empty_lines: true, trim: true });
                             req.body = { departamentos: registros };
-                        } else 
+                        } else
                             return res.status(400).json({ msg: 'Formato de arquivo não suportado (apenas .json ou .csv)' });
                     }
 
@@ -84,25 +84,25 @@ module.exports = class MiddlewareDepartamento {
 
 
 
-     validar_localizacao = async (req, res, next) => {
+    validar_localizacao = async (req, res, next) => {
         // ..
-            const departamentos = this.normalizarDepartamentos(req.body);
+        const departamentos = this.normalizarDepartamentos(req.body);
         for (let i = 0; i < departamentos.length; i++) {
 
-            let cep =  departamentos[i]?.localizacao?.trim();
+            let cep = departamentos[i]?.localizacao?.trim();
             cep = cep.replace(/\D/g, '');
-    
+
             const resposta = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
 
             const identificador = departamentos.length === 1 ? '' : `do departamento ${i + 1}`;
 
             if (resposta.data.erro) {
                 return res.status(400).json({
-                  cod: 3,
-                  status: false,
-                  msg: `O cep ${identificador || 'informada'} é inválida.`,
+                    cod: 3,
+                    status: false,
+                    msg: `O cep ${identificador || 'informada'} é inválida.`,
                 });
-              }
+            }
         }
         next();
     };
@@ -125,18 +125,18 @@ module.exports = class MiddlewareDepartamento {
         next();
     };
 
-        validar_autenticacao = async (req, res, next) => {
-            const objToken = new TokenJWT()
-            const headers = req.headers['authorization']; // certo: tudo minúsculo
-            if (objToken.validarToken(headers) == true) {
-                next();
-                return
-            }
-            return res.status(400).json({
-                msg: "Token Invalido",
-                status: false
-            });
+    validar_autenticacao = async (req, res, next) => {
+        const objToken = new TokenJWT()
+        const headers = req.headers['authorization']; // certo: tudo minúsculo
+        if (objToken.validarToken(headers) == true) {
+            next();
+            return
         }
+        return res.status(400).json({
+            msg: "Token Invalido",
+            status: false
+        });
+    }
 
     validar_departamento_logado = async (req, res, next) => {
         const id = req.params.id;

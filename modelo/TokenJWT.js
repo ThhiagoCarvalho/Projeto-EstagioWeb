@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-module.exports  = class MeuTokenJWT  { 
+module.exports = class MeuTokenJWT {
     constructor() {
         this._key = "K7k6ezDzv7t0DEatig07fdRF2Oe4Y46UG9h35vYgJVk"; // Chave secreta
         this._alg = 'HS256'; // Algoritmo de criptografia
@@ -71,6 +71,6 @@ module.exports  = class MeuTokenJWT  {
     setAlg(alg) {
         this._alg = alg;
     }
-        
+
 
 }

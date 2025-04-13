@@ -96,8 +96,8 @@ module.exports = class controlDepartamento {
     let localizacao = request.body.localizacao;
     localizacao = localizacao.replace(/\D/g, '');
     const resposta = await axios.get(`https://viacep.com.br/ws/${localizacao}/json/`);
-    
-    
+
+
     const endereco = resposta.data;
     const enderecoCompleto = `${endereco.logradouro}, ${endereco.bairro}, ${endereco.localidade} - ${endereco.uf}, CEP: ${endereco.cep}`;
 
