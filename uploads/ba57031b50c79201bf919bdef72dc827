@@ -1,0 +1,9 @@
+nome,email,cpf,cargo,salario,data_contratacao,departamento_id
+Jaoao,jaoao@email.com,122.454.789-01,analista,6000,2023-09-01,1
+Maria Silva,maria.silva@email.com,321.654.987-00,gerente,9500,2021-06-15,2
+Carlos Souza,carlos.souza@email.com,987.321.654-77,desenvolvedor,7000,2022-01-10,1
+Ana Lima,ana.lima@email.com,456.789.123-22,analista,6200,2023-11-05,3
+Bruno Alves,bruno.alves@email.com,159.753.486-33,coordenador,8500,2020-03-20,2
+Juliana Rocha,juliana.rocha@email.com,741.852.963-11,estagiária,2000,2024-02-01,1
+Felipe Ramos,felipe.ramos@email.com,963.258.147-44,desenvolvedor,6800,2022-08-18,1
+Larissa Nunes,larissa.nunes@email.com,258.369.147-55,analista,6100,2023-10-10,3

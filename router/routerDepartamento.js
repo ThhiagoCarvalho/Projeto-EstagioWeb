@@ -26,7 +26,6 @@ module.exports = class RouterDepartamento {
         )
 
         this._router.put ('/:id' ,
-            this._middlewareDepartamento.validar_autenticacao,
 
             this._middlewareDepartamento.validar_nome,
             this._middlewareDepartamento.validar_orcamento,
@@ -41,6 +40,12 @@ module.exports = class RouterDepartamento {
             this._middlewareDepartamento.validar_autenticacao,
             this._controleDepartamento.controle_departamento_read
         )
+
+        this._router.get ('/buscar/:id' ,
+            this._middlewareDepartamento.validar_autenticacao,
+            this._controleDepartamento.controle_departamento_readPage
+        )
+
 
         this._router.delete ('/:id' ,
             this._middlewareDepartamento.validar_autenticacao,

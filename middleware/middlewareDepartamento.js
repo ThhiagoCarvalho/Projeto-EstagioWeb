@@ -70,7 +70,7 @@ module.exports = class MiddlewareDepartamento {
             const orcamento = departamentos[i]?.orcamento;
             const identificador = departamentos.length === 1 ? '' : `do departamento ${i + 1}`;
 
-            if (orcamento === undefined || isNaN(orcamento) || parseFloat(orcamento) < 0) {
+            if (!orcamento ||orcamento === undefined || isNaN(orcamento) || parseFloat(orcamento) < 0) {
                 return res.status(400).json({
                     cod: 2,
                     status: false,
@@ -90,13 +90,24 @@ module.exports = class MiddlewareDepartamento {
         for (let i = 0; i < departamentos.length; i++) {
 
             let cep = departamentos[i]?.localizacao?.trim();
+            console.log("enmttrou")
+
+            if (!cep) {
+                console.log("enmttrou")
+                return res.status(400).json({
+                    cod: 3,
+                    status: false,
+                    msg: `O cep  é inválido.`,
+
+                });
+            }
             cep = cep.replace(/\D/g, '');
 
             const resposta = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
 
             const identificador = departamentos.length === 1 ? '' : `do departamento ${i + 1}`;
 
-            if (resposta.data.erro) {
+            if (!cep || resposta.data.erro) {
                 return res.status(400).json({
                     cod: 3,
                     status: false,

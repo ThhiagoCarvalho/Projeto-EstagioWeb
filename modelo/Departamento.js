@@ -50,6 +50,21 @@ module.exports = class Departamento {
         }
     }
 
+    async readPage(pagina) {
+        const itensPorPagina = 10;
+        const inicio = (parseInt(pagina) - 1) * itensPorPagina;
+        const conexao = Banco.getConexao()
+        const sql = `SELECT * FROM departamentos LIMIT ${inicio}, ${itensPorPagina}`;
+
+        try {
+            const [result] = await conexao.promise().query(sql);
+            return result;
+        } catch (error) {
+            console.log("Errro >>>", error)
+            return false
+        }
+    }
+
 
     async delete() {
         const conexao = Banco.getConexao();
@@ -67,6 +82,7 @@ module.exports = class Departamento {
 
     async verificarExistencia() {
         const conexao = Banco.getConexao()
+        console.log(this.id)
         const sql = "select * from departamentos where id = ?"
         try {
             const [result] = await conexao.promise().execute(sql, [this.id])

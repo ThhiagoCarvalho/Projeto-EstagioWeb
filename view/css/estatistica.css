@@ -411,6 +411,13 @@ h2 {
     margin-top: 10px;
 }
 
+.text-sucess {
+    margin-left: 25px;
+    color: rgb(29, 187, 95);
+    font-weight: bold;
+    margin-top: 10px;
+}
+
 .button.sucesso {
     background-color: #41df75;
     border-style: outset;

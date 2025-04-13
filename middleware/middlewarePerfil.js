@@ -114,17 +114,14 @@ module.exports = class MiddlewarePerfil {
         }
         next();
     }
+    verificarEstadoCivil = async (req, res, next) => {
 
-    validarEmail = (req, res, next) => {
-
-        const telefone = req.body.telefone;
-        if (!telefone || !/^\d{10,11}$/.test(telefone)) {
+        const estado_civil = req.body.estado_civil;
+        if (!estado_civil) {
             return res.status(400).json({
-                cod: 2,
-                status: false,
-                msg: `O telefone é inválido. Deve conter apenas números e ter entre 10 e 11 dígitos.`,
+                msg: "Preencha o estado civil",
+                status: false
             });
-
         }
         next();
     }

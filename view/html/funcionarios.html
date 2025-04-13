@@ -150,22 +150,14 @@
                                 </div>
                                 <div id="error-message_post_arquivo" class="text-danger" style="display: none;">
                                 </div>
+                                <div id="sucess-message_post_arquivo" class="text-sucess" style="display: none;"></div>
 
-                            </div>
                         </form>
                     </div>
 
                 </div>
 
-                <!--<div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalUpdateLabel">Editar Funcionário</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>                    <div class="modal-dialog  customizar-tabelaFuncionario">
 
-                            </div>  -->
-
-                <!-- Modal de Atualização -->
                 <div class="modal fade" id="modalEdicaoFuncionario" tabindex="-1" aria-labelledby="modalEditarLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -355,7 +347,7 @@
         const botaoCadastroArquivo = document.getElementById("CadastroFuncionarioArquivo")
         const mensage_error_arquivo = document.getElementById("error-message_post_arquivo");
 
-
+        const mensage_sucess_arquivo = document.getElementById("sucess-message_post_arquivo");
 
         const btnCadastroPerfil = document.getElementById("botaoCadastrarPerfil")
         const btnAtualizarPerfil = document.getElementById("botaoAtualizarPerfil")
@@ -475,7 +467,7 @@
                 mensage_error.textContent = "Sem resultados"
                 mensage_error.style = "block";
             } else {
-                console.log(objJson_get)
+
                 mensage_error.style = "display: none";
 
                 objJson_get.dados.forEach(dados_get => {
@@ -518,7 +510,7 @@
                     tbody.appendChild(linhaTabela);
 
                     const obj = objJson_get
-                    console.log(dados_get)
+
 
                     btnAtualizarFuncionario.onclick = function (event) {
                         event.preventDefault();
@@ -685,7 +677,7 @@
             const genero = document.getElementById('genero').value
             const idade = document.getElementById('idade').value
             const estado_civil = document.getElementById('estado_civil').value
-            
+            console.log("estado civeil" + estado_civil)
 
             console.log("funcionario_id" + funcionario_id)
             console.log(perfil_id)
@@ -772,43 +764,53 @@
 
 
         function cadastro_funcionario_arquivo() {
-            const inputArquivo = document.getElementById("variavelArquivo");
-            if (!inputArquivo || !inputArquivo.files || inputArquivo.files.length === 0) {
-                mensage_error_arquivo.textContent = "Selecione um arquivo antes de enviar.";
-                mensage_error_arquivo.style.display = "block";
-                return;
+            try {
+                const inputArquivo = document.getElementById("variavelArquivo");
+                if (!inputArquivo || !inputArquivo.files || inputArquivo.files.length === 0) {
+                    mensage_error_arquivo.textContent = "Selecione um arquivo antes de enviar.";
+                    mensage_error_arquivo.style.display = "block";
+
+                }
+
+                const formData = new FormData();
+                const arquivo = inputArquivo.files[0];
+                formData.append("variavelArquivo", arquivo);
+
+                const uri_post_funcionarios_arquivo = "/funcionarios/upload";
+
+                fetch(uri_post_funcionarios_arquivo, {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "Accept": "application/json",
+                        // Remova esta linha ↓↓↓ quando usar FormData!
+                        // "Content-Type": "application/json",
+                    }
+                }).then(res => res.json())
+                    .then(data => {
+                        if (data.status == false) {
+                            mensage_error_arquivo.textContent = data.msg || "Erro no upload.";
+                            mensage_error_arquivo.style.display = "block";
+                            return;
+                        } else {
+                            mensage_sucess_arquivo.textContent = 
+                            `Nomes duplicados: ${data.nomes_duplicados || "0"} | ` +
+                                `Duplicados: ${data.duplicados || "0"} | ` +
+                                `Processados: ${data.processados || "0"}`;
+                            console.log(mensage_sucess_arquivo)
+
+                            mensage_sucess_arquivo.style.display = "block";
+                        }
+                    }).catch(err => {
+                        alert("Erro ao enviar arquivo.");
+                        console.error(err);
+                    });
+
+            } catch (error) {
+                console.error("Error:", error);
             }
 
-            const formData = new FormData();
-            const arquivo = inputArquivo.files[0];
-            formData.append("variavelArquivo", arquivo);
-
-            const uri_post_funcionarios_arquivo = "/funcionarios/upload";
-
-            fetch(uri_post_funcionarios_arquivo, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    "Authorization": 'Bearer ' + token
-                }
-            }).then(res => res.json())
-                .then(data => {
-                    if (data.status == false) {
-                        mensage_error_arquivo.textContent = data.msg || "Erro no upload.";
-                        mensage_error_arquivo.style.display = "block";
-                        return
-                    } else {
-                        alert("Arquivo enviado com sucesso!");
-                        location.reload();
-                    }
-                }).catch(err => {
-                    alert("Erro ao enviar arquivo.");
-                    console.error(err);
-                });
         }
-
 
 
         botaoCadastro.onclick = function () {

@@ -96,6 +96,28 @@
                             <!-- O <tbody> será criado dinamicamente -->
                         </table>
 
+                        <div id="spinnerContainer" style="display: none;">
+                            <div class="spinner-border text-primary" role="status" style="margin: auto;">
+                                <span class="visually-hidden">Carregando...</span>
+                            </div>
+                        </div>
+
+
+                        <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+                            <button id="btnAnterior" class="btn btn-outline-secondary"
+                                onclick="paginaAnterior()">←Anterior</button>
+
+                            <nav>
+                                <ul class="pagination mb-0">
+                                    <li class="page-item active"><span class="page-link" id="numPagina">1</span>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            <button id="btnProximo" class="btn btn-outline-secondary"
+                                onclick="proximaPagina()">Próxima
+                                →</button>
+                            </div>
                         <div class="mt-5">
                             <h5>Cadastro de Departamento</h5>
                             <button class="btn btn-primary mb-3" data-bs-toggle="modal"
@@ -152,7 +174,7 @@
                                                     placeholder="Localização" required>
                                             </div>
                                             <div class="col-md-6 mt-2">
-                                                <input type="date" id="data_criacao" class="form-control"
+                                                <input type="text" id="data_criacao" class="form-control"
                                                     placeholder="Data de Criação" required>
                                             </div>
                                             <div id="error-message" class="text-danger mt-2" style="display: none;">
@@ -217,6 +239,9 @@
 
 
     <script>
+        let paginaAtual = 1;
+        const itensPorPagina = 5;
+        let ultimaPagina = false;
         /*codigo para o menu do site */
         const menuDiv = document.getElementById("menu-mobile")
         const btnAnimar = document.getElementById("btn-menu")
@@ -237,21 +262,72 @@
 
 
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const uri_departamentos = `/departamentos/1`;
-            fetch(uri_departamentos, {
-                method: "GET",
+        async function carregarFuncionarios(pagina = 1) {
+            try {
+                mostrarSpinner(true);
+                const uri_post_perfil = `/departamentos/buscar/${pagina}`;
+                fetch(uri_post_perfil, {
+                    method: "GET",
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json",
                         "Authorization": 'Bearer ' + token
                     }
-            }).then((response) => {
-                return response.json();
-            }).then((data) => {
-                montarTabelaOpcao(data)
-            })
-        })
+                }).then((response) => {
+                    return response.json();
+                }).then((data) => {
+                    console.log(data)
+                    if (data.status) {
+                        montarTabelaOpcao(data);
+                        paginaAtual = pagina;
+                        document.getElementById("numPagina").textContent = paginaAtual;
+
+
+                    } else {
+                        alert("Erro ao carregar funcionários.");
+                    }
+                })
+            } catch (erro) {
+                console.error("Erro na requisição:", erro);
+            } finally {
+                mostrarSpinner(false);
+            }
+        }
+
+        function proximaPagina() {
+            if (!ultimaPagina) {
+                carregarFuncionarios(paginaAtual + 1);
+            }
+        }
+
+        function paginaAnterior() {
+            console.log('Botão anterior clicado');
+
+            if (paginaAtual > 1) {
+                carregarFuncionarios(paginaAtual - 1);
+            }
+        }
+
+        function mostrarSpinner(mostrar) {
+            const spinner = document.getElementById("spinnerContainer");
+            spinner.style.display = mostrar ? "block" : "none";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            carregarFuncionarios(paginaAtual);
+        });
+
+
+
+        function formatarData(dataISO) {
+            const data = new Date(dataISO);
+            return data.toLocaleDateString('pt-BR', {
+                timeZone: 'UTC'
+            });
+        }
+
+
+
 
         function montarTabelaOpcao(objJson_get) {
             let tbody = TabelaGetOpcao.querySelector("tbody");
@@ -277,7 +353,7 @@
                         dados_get.nome,
                         dados_get.orcamento,
                         dados_get.localizacao,
-                        dados_get.data_criacao
+                        formatarData(dados_get.data_criacao)
 
                     ];
 
@@ -314,7 +390,7 @@
                         document.getElementById("nome").value = dados_get.nome;
                         document.getElementById("orcamento").value = dados_get.orcamento;
                         document.getElementById("localizacao").value = dados_get.localizacao;
-                        document.getElementById("data_criacao").value = dados_get.data_criacao;
+                        document.getElementById("data_criacao").value = formatarData(dados_get.data_criacao);
 
                         // Abre o modal
                         const modal = new bootstrap.Modal(document.getElementById('modalEdicaoDepartamento'));
@@ -338,7 +414,7 @@
 
 
 
-        function deletarDepartamento(id) {
+        /*function deletarDepartamento(id) {
             const uri_delete_departamentos_arquivo = `/departamentos/${id}`;
 
             fetch(uri_delete_departamentos_arquivo, {
@@ -364,6 +440,7 @@
                 });
 
         }
+                */
         const formUploadArquivo = document.getElementById("formUploadArquivo");
 
         formUploadArquivo.addEventListener("submit", function (e) {

@@ -16,7 +16,9 @@ module.exports = class RouterPerfil {
                         
             this._middlewarePerfil.validarIdade,                   
             this._middlewarePerfil.validarTelefone,                                                        
-            this._middlewarePerfil.validarCep,        
+            this._middlewarePerfil.validarCep,      
+            this._middlewarePerfil.verificarEstadoCivil,     
+  
             this._controlePerfil.controle_perfil_post
         );
         
@@ -25,7 +27,9 @@ module.exports = class RouterPerfil {
                  
             this._middlewarePerfil.validarIdade,                   
             this._middlewarePerfil.validarTelefone,                                                        
-            this._middlewarePerfil.validarCep,        
+            this._middlewarePerfil.validarCep,     
+            this._middlewarePerfil.verificarEstadoCivil,     
+
 
             this._controlePerfil.controle_perfil_put
         );

@@ -58,6 +58,24 @@ module.exports = class Funcionario {
     }
   }
 
+
+  async verificarCfp() {
+    const conexao = Banco.getConexao()
+    console.log(this.cpf)
+    const sql = "select * from funcionarios where cpf = ?"
+    try {
+      const [result] = await conexao.promise().execute(sql, [this.cpf])
+      if (result.length > 0) {
+        return true
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log("Errro >>>", error)
+      return false
+    }
+  }
+
   async verificarExistencia() {
     const conexao = Banco.getConexao()
     const sql = "select * from funcionarios where id = ?"

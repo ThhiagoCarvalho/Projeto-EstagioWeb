@@ -129,6 +129,20 @@ module.exports = class controlDepartamento {
     response.status(200).send(objResposta);
   }
 
+
+  async controle_departamento_readPage(request, response) {
+    const id = parseInt(request.params.id)
+
+    const departamento = new Departamento();
+    const Resultadodepartamento = await departamento.readPage(id);
+
+    const objResposta = {
+      cod: 1,
+      status: true,
+      dados: Resultadodepartamento
+    };
+    response.status(200).send(objResposta);
+  }
   async controle_departamento_delete(request, response) {
     const id = request.params.id;
 

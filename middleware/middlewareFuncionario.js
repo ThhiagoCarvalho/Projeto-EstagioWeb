@@ -6,6 +6,7 @@ const { parse } = require('csv-parse/sync');
 const Funcionario = require('../modelo/Funcionario');
 const upload = multer({ dest: 'uploads/' });
 const TokenJWT = require("../modelo/TokenJWT");
+const Departamento = require('../modelo/Departamento');
 
 
 module.exports = class MiddlewareFuncionario {
@@ -46,6 +47,8 @@ module.exports = class MiddlewareFuncionario {
         return [body];
     }
     validar_nome = (req, res, next) => {
+        console.log("entrou")
+
         const funcionarios = this.normalizarFuncionarios(req.body);
         for (let i = 0; i < funcionarios.length; i++) {
             const nome = funcionarios[i]?.nome?.trim();
@@ -81,15 +84,26 @@ module.exports = class MiddlewareFuncionario {
         next();
     }
 
-    validar_cpf = (req, res, next) => {
+    validar_cpf = async (req, res, next) => {
         const funcionarios = this.normalizarFuncionarios(req.body);
         const regexCPF = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
 
         for (let i = 0; i < funcionarios.length; i++) {
             const { cpf } = funcionarios[i];
             const identificador = funcionarios.length === 1 ? "" : `do funcionário ${i + 1}`
+            const objFuncionario = new Funcionario()
+            objFuncionario.cpf = cpf
+            const existeFuncionario = await objFuncionario.verificarCfp()
+            console.log(existeFuncionario)
+            if ( existeFuncionario ) { 
+                return res.status(400).json({
+                    cod: 3,
+                    status: false,
+                    msg: `O CPF ${identificador} ja esta usando!`,
+                });
+            }
 
-            if (!cpf || !regexCPF.test(cpf)) {
+            if ( !cpf || !regexCPF.test(cpf)) {
                 return res.status(400).json({
                     cod: 3,
                     status: false,
@@ -124,7 +138,7 @@ module.exports = class MiddlewareFuncionario {
             const { salario } = funcionarios[i];
             const identificador = funcionarios.length === 1 ? "" : `do funcionário ${i + 1}`;
 
-            if (salario === undefined || isNaN(salario) || parseFloat(salario) <= 0) {
+            if (!salario || salario === undefined || isNaN(salario) || parseFloat(salario) <= 0) {
                 return res.status(400).json({
                     cod: 5,
                     status: false,
@@ -156,13 +170,18 @@ module.exports = class MiddlewareFuncionario {
         next();
     }
 
-    validar_departamento_id = (req, res, next) => {
+
+    validar_departamento_id = async (req, res, next) => {
         const funcionarios = this.normalizarFuncionarios(req.body);
         for (let i = 0; i < funcionarios.length; i++) {
             const depId = funcionarios[i].departamento_id;
-            const identificador = funcionarios.length === 1 ? "" : `do funcionário ${i + 1}`;
+            const identificador = funcionarios.length ===  1? "" : `do funcionário ${i + 1}`;
+            const departamento = new Departamento();
+            departamento.id = depId
+            console.log(depId)
+            const resultado = await departamento.verificarExistencia();
 
-            if (isNaN(depId) || depId <= 0) {
+            if (!resultado || isNaN(depId) || depId <= 0) {
                 return res.status(400).json({
                     cod: 7,
                     status: false,

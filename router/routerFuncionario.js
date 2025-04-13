@@ -68,7 +68,6 @@ module.exports = class RouterFuncionario {
 
     
         this._router.post ('/upload' ,
-            this._middlewareFuncionario.validar_autenticacao,
 
             this._middlewareFuncionario.uploadJSON,             
             this._middlewareFuncionario.validar_nome,
@@ -77,6 +76,8 @@ module.exports = class RouterFuncionario {
             this._middlewareFuncionario.validar_cargo,
             this._middlewareFuncionario.validar_salario,
             this._middlewareFuncionario.validar_data_contratacao,
+            this._middlewareFuncionario.validar_departamento_id,
+
 
             this._controleFuncionario.controle_csv_funcionario
         )
