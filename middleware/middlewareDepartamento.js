@@ -6,7 +6,7 @@ const { parse } = require('csv-parse/sync');
 const Departamento = require('../modelo/Departamento');
 const axios = require('axios');
 const upload = multer({ dest: 'uploads/' });
-const TokenJWT = require("jsonwebtoken");
+const TokenJWT = require("../modelo/TokenJWT");
 
 
 module.exports = class MiddlewareDepartamento {

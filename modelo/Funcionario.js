@@ -153,6 +153,23 @@ module.exports = class Funcionario {
       return null;
     }
   }
+
+
+  async orcamentoTotal() {
+    const conexao = Banco.getConexao();
+    const sql = `
+         SELECT SUM(orcamento) AS orcamento_total
+      FROM departamentos
+    `;
+
+    try {
+      const [result] = await conexao.promise().execute(sql);
+      return result[0].orcamento_total || 0;
+    } catch (error) {
+      console.log("Erro ao calcular  orçamento total:", error);
+      return null;
+    }
+  }
   async totalFuncionariosAtivos() {
     const conexao = Banco.getConexao();
     const sql = `

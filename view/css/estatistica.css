@@ -62,7 +62,7 @@ header .menu-desktop nav ul {
 
 .grafico-frame {
     width: 100%;
-    height: 500px;
+    height: 560px;
     overflow: hidden;
 }
 
@@ -75,23 +75,6 @@ header .menu-desktop nav ul {
 }
 
 
-.graficoOcorrencias {
-    background-color: #ffffff; /* fundo branco para destacar */
-    border-radius: 16px;       /* bordas arredondadas */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* sombra suave */
-    padding: 20px;
-    margin-bottom: 30px;
-    transition: transform 0.2s ease;
-    width: 100%;
-    max-width: 800px;
-    margin-top: 30px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.graficoOcorrencias:hover {
-    transform: translateY(-5px); /* levanta um pouco o card ao passar o mouse */
-}
 
 
 .caixas {

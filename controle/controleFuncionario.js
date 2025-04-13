@@ -137,6 +137,8 @@ module.exports = class controlFuncionario {
 
 
   async controle_funcionario_readPage(request, response) {
+    console.log("Entrou porra getid" )
+
     const id = parseInt(request.params.id)
     console.log(id)
     const funcionario = new Funcionario();
@@ -172,23 +174,35 @@ module.exports = class controlFuncionario {
   }
 
   async controle_funcionario_dadosRelatorio(req, res) {
+    console.log("Entrou porra controle_funcionario_dadosRelatorio")
     try {
       const funcionario = new Funcionario();
 
       const totalFuncionarios = await funcionario.totalFuncionariosAtivos();
+      console.log("totalFuncionarios:", totalFuncionarios);
+      
       const funcionariosCargo = await funcionario.funcionariosPorCargo();
-      const proporcaoGenero = await funcionario.proporcaoGenero();
+      console.log("funcionariosCargo:", funcionariosCargo);
+            
+      const orcamentoTotal = await funcionario.orcamentoTotal();
+      console.log("orcamentoTotal:", orcamentoTotal);
+      
       const mediaSalarial = await funcionario.mediaSalarialGeral();
+      console.log("mediaSalarial:", mediaSalarial);
+      
       const distribuicaoSalarial = await funcionario.distribuicaoSalarialPorDepartamento();
+      console.log("distribuicaoSalarial:", distribuicaoSalarial);
+      
       const idadePorDepartamento = await funcionario.idadeMediaPorDepartamento();
-
+      console.log("idadePorDepartamento:", idadePorDepartamento);
+      
       const objResposta = {
         cod: 7,
         status: true,
         relatorio: {
           total_funcionarios: totalFuncionarios,
           funcionarios_por_cargo: funcionariosCargo,
-          proporcao_genero: proporcaoGenero,
+          orcamento_total: orcamentoTotal,
           media_salarial_geral: mediaSalarial,
           distribuicao_salarial_departamento: distribuicaoSalarial,
           idade_media_departamento: idadePorDepartamento

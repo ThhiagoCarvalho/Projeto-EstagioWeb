@@ -83,8 +83,8 @@
                     </nav>
                 </div>
 
+                <!-- Conteúdo Principal -->
                 <div class="container">
-
                     <div class="caixas">
                         <main class="container mt-3">
                             <h2 class="mb-4">Visão Geral</h2>
@@ -93,7 +93,7 @@
                                     <div class="card text-bg-primary">
                                         <div class="card-body">
                                             <h5 class="card-title">Total de Funcionários</h5>
-                                            <p class="card-text fs-4">120</p>
+                                            <p class="card-text fs-4 info-qtd-funcionarios">--</p>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +101,7 @@
                                     <div class="card text-bg-success">
                                         <div class="card-body">
                                             <h5 class="card-title">Média Salarial</h5>
-                                            <p class="card-text fs-4">R$ 4.200,00</p>
+                                            <p class="card-text fs-4 info-salario">--</p>
                                         </div>
                                     </div>
                                 </div>
@@ -109,34 +109,36 @@
                                     <div class="card text-bg-warning">
                                         <div class="card-body">
                                             <h5 class="card-title">Departamentos</h5>
-                                            <p class="card-text fs-4">5</p>
+                                            <p class="card-text fs-4 info-departamentos">--</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="card text-bg-info">
                                         <div class="card-body">
-                                            <h5 class="card-title">Novos Funcionários</h5>
-                                            <p class="card-text fs-4">+8 este mês</p>
+                                            <h5 class="card-title">Orçamento Total</h5>
+                                            <p class="card-text fs-4 info-orcamento">--</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="graficoOcorrencias">
+                            <!-- Gráficos -->
+                            <div class="graficoOcorrencias mt-5">
                                 <h3>Distribuição salarial</h3>
                                 <div class="grafico-frame">
                                     <iframe src="../html/grafico.html"></iframe>
                                 </div>
                             </div>
+
                             <div class="graficoOcorrencias">
-                                <h3>Idade por departamento </h3>
+                                <h3>Idade por departamento</h3>
                                 <div class="grafico-frame">
-                                    <iframe src="../html/graficopie.html"></iframe>
+                                    <iframe src="../html/grafico2.html"></iframe>
                                 </div>
                             </div>
+                        </main>
                     </div>
-
                 </div>
             </div>
         </header>
@@ -146,10 +148,6 @@
     <script>
         const usuario = JSON.parse(localStorage.getItem("Funcionario"));
 
-        if (!usuario || usuario.cargo !== "administrador") {
-             document.getElementById("linkFuncionario").style.display = "none";
-             document.getElementById("linkDepartamento").style.display = "none";
-        }
 
 
         /*codigo para o menu do site */
@@ -158,6 +156,61 @@
         const forms = document.getElementById("container-wrapper")
         const dadosFuncionarios = localStorage.getItem("Funcionarios")
         const objFuncionario = JSON.parse(dadosFuncionarios);
+
+
+
+
+        async function carregarRelatorio() {
+            try {
+                const uri_funcionarios_relatorios = "/funcionarios/relatorios/buscar";
+
+                fetch(uri_funcionarios_relatorios, {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        //"Authorization":'Bearer ' + objUsuario.token
+                    }
+                }).then((response) => {
+                    return response.json();
+                }).then((data) => {
+
+                    if (data.status && data.relatorio) {
+                        const relatorio = data.relatorio;
+
+                        const mediaSalarial = parseFloat(relatorio.media_salarial_geral).toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        });
+
+                        document.querySelector(".info-salario").textContent = mediaSalarial;
+                        document.querySelector(".info-qtd-funcionarios").textContent = relatorio.total_funcionarios;
+                        document.querySelector(".info-departamentos").textContent = relatorio.distribuicao_salarial_departamento.length;
+                        document.querySelector(".info-orcamento").textContent = relatorio.orcamento_total;
+
+                        const grafico1 = document.querySelector('iframe[src$="grafico.html"]');
+                        const grafico2 = document.querySelector('iframe[src$="grafico2.html"]');
+
+                        const payload = {
+                            tipo: "dadosRelatorio",
+                            dados: relatorio
+                        };
+
+                        grafico1.contentWindow.postMessage(payload, "*");
+                        grafico2.contentWindow.postMessage(payload, "*");
+                    } else {
+                        console.error("Erro ao obter relatório:", data.msg);
+                    }
+
+                })
+            } catch (erro) {
+                console.error("Erro na requisição do relatório:", erro);
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            carregarRelatorio();
+        })
 
         btnAnimar.addEventListener('click', animarMenu)
         function animarMenu() {
@@ -179,6 +232,8 @@
             const item = event.target.closest('.submenu');
             item.classList.toggle('open');
         }
+
+
 
 
     </script>
