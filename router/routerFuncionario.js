@@ -41,6 +41,8 @@ module.exports = class RouterFuncionario {
         
 
         this._router.get ('/:id' ,
+            this._middlewareFuncionario.validar_autenticacao,
+
             this._controleFuncionario.controle_funcionario_readPage
         )
 

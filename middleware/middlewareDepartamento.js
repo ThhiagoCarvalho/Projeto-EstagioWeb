@@ -6,6 +6,8 @@ const { parse } = require('csv-parse/sync');
 const Departamento = require('../modelo/Departamento');
 const axios = require('axios');
 const upload = multer({ dest: 'uploads/' });
+const TokenJWT = require("jsonwebtoken");
+
 
 module.exports = class MiddlewareDepartamento {
     constructor() {
@@ -123,6 +125,18 @@ module.exports = class MiddlewareDepartamento {
         next();
     };
 
+        validar_autenticacao = async (req, res, next) => {
+            const objToken = new TokenJWT()
+            const headers = req.headers['authorization']; // certo: tudo minúsculo
+            if (objToken.validarToken(headers) == true) {
+                next();
+                return
+            }
+            return res.status(400).json({
+                msg: "Token Invalido",
+                status: false
+            });
+        }
 
     validar_departamento_logado = async (req, res, next) => {
         const id = req.params.id;

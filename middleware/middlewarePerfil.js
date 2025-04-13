@@ -1,6 +1,7 @@
 const Perfil = require("../modelo/Perfil");
 const express = require('express');
 const axios = require('axios');
+const TokenJWT = require("../modelo/TokenJWT");
 
 module.exports = class MiddlewarePerfil {
 
@@ -63,6 +64,19 @@ module.exports = class MiddlewarePerfil {
             });
         }
     }
+
+        validar_autenticacao = async (req, res, next) => {
+            const objToken = new TokenJWT()
+            const headers = req.headers['authorization']; // certo: tudo minúsculo
+            if (objToken.validarToken(headers) == true) {
+                next();
+                return
+            }
+            return res.status(400).json({
+                msg: "Token Invalido",
+                status: false
+            });
+        }
 
     validarIdade = (req, res, next) => {
         const idade = req.body.idade;

@@ -144,6 +144,14 @@
 
 
     <script>
+        const usuario = JSON.parse(localStorage.getItem("Funcionario"));
+
+        if (!usuario || usuario.cargo !== "administrador") {
+             document.getElementById("linkFuncionario").style.display = "none";
+             document.getElementById("linkDepartamento").style.display = "none";
+        }
+
+
         /*codigo para o menu do site */
         const menuDiv = document.getElementById("menu-mobile")
         const btnAnimar = document.getElementById("btn-menu")
