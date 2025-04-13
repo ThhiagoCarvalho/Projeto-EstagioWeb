@@ -211,8 +211,8 @@
                                                     placeholder="telefone" required>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="cep" id="endereco" class="form-control"
-                                                    placeholder="cep" required>
+                                                <input type="cep" id="endereco" class="form-control" placeholder="cep"
+                                                    required>
                                             </div>
                                             <div class="col-md-4 mt-2">
                                                 <input type="text" id="genero" class="form-control" placeholder="genero"
@@ -311,9 +311,8 @@
         const btnAnimar = document.getElementById("btn-menu")
         const TabelaGetOpcao = document.getElementById("TabelaGetOpcao")
         const forms = document.getElementById("container-wrapper")
-        /*const dadosFuncionarios = localStorage.getItem("Funcionarios")
-        const objFuncionario = JSON.parse(dadosFuncionarios);
-*/
+        const usuario = JSON.parse(localStorage.getItem("Funcionario"));
+        const token = usuario.token
 
         const mensage_error = document.getElementById("error-message");
         const botaoAtualizar = document.getElementById("botaoAtualizar")
@@ -339,7 +338,7 @@
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    //"Authorization":'Bearer ' + objUsuario.token
+                    "Authorization": 'Bearer ' + token
                 }
             }).then((response) => {
                 return response.json();
@@ -528,7 +527,7 @@
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    //"Authorization":'Bearer ' + objUsuario.token
+                    "Authorization": 'Bearer ' + token
                 }
             }).then((response) => {
                 return response.json();
@@ -567,7 +566,7 @@
             const idade = document.getElementById('idade').value
             const estado_civil = document.getElementById('estado_civil').value
 
-            console.log("funcionario_id"+ funcionario_id)
+            console.log("funcionario_id" + funcionario_id)
             console.log(perfil_id)
             const jsonEnvio = {
                 "usuario_logado": funcionario_id,
@@ -586,7 +585,7 @@
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    //"Authorization":'Bearer ' + objUsuario.token
+                    "Authorization": 'Bearer ' + token
                 }
             }).then((response) => {
                 return response.json();
@@ -620,6 +619,11 @@
 
             fetch(uri_delete_funcionarios_arquivo, {
                 method: "DELETE",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token
+                }
             }).then(res => res.json())
                 .then(data => {
                     if (data.status == false) {
@@ -662,7 +666,12 @@
 
             fetch(uri_post_funcionarios_arquivo, {
                 method: "POST",
-                body: formData
+                body: formData,
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token
+                }
             }).then(res => res.json())
                 .then(data => {
                     if (data.status == false) {
@@ -712,7 +721,7 @@
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    //"Authorization":'Bearer ' + objUsuario.token
+                    "Authorization": 'Bearer ' + token
                 }
             }).then((response) => {
                 return response.json();
@@ -784,7 +793,7 @@
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json",
-                        //"Authorization":'Bearer ' + objUsuario.token
+                        "Authorization": 'Bearer ' + token
                     }
                 }).then((response) => {
                     return response.json();

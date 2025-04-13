@@ -146,9 +146,8 @@
 
     <script>
         const usuario = JSON.parse(localStorage.getItem("Funcionario"));
-    
-        console.log(usuario)
-        console.log(usuario.Usuario)
+        const token = usuario.token
+
 
         if (!usuario || (usuario.Usuario.cargo !== "administrador" && usuario.Usuario.cargo !== "administracao")) {
             document.getElementById("menuCadastroDesktop").style.display = "none";
@@ -173,9 +172,10 @@
                 fetch(uri_funcionarios_relatorios, {
                     method: "GET",
                     headers: {
+                        
                         "Accept": "application/json",
                         "Content-Type": "application/json",
-                        //"Authorization":'Bearer ' + objUsuario.token
+                        "Authorization":'Bearer ' + token
                     }
                 }).then((response) => {
                     return response.json();

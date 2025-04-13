@@ -14,6 +14,8 @@ module.exports = class RouterDepartamento {
     criarRotasDepartamento () { 
 
         this._router.post ('/' ,
+            this._middlewareDepartamento.validar_autenticacao,
+
             this._middlewareDepartamento.validar_nome,
             this._middlewareDepartamento.validar_orcamento,
             this._middlewareDepartamento.validar_localizacao,
@@ -24,6 +26,7 @@ module.exports = class RouterDepartamento {
         )
 
         this._router.put ('/:id' ,
+            this._middlewareDepartamento.validar_autenticacao,
 
             this._middlewareDepartamento.validar_nome,
             this._middlewareDepartamento.validar_orcamento,
@@ -35,16 +38,19 @@ module.exports = class RouterDepartamento {
         )
         
         this._router.get ('/:id' ,
+            this._middlewareDepartamento.validar_autenticacao,
             this._controleDepartamento.controle_departamento_readPage
         )
 
         this._router.delete ('/:id' ,
+            this._middlewareDepartamento.validar_autenticacao,
             this._middlewareDepartamento.validar_departamento_logado,
-
             this._controleDepartamento.controle_departamento_delete
         )
 
         this._router.post ('/upload' ,
+            this._middlewareDepartamento.validar_autenticacao,
+
             this._middlewareDepartamento.uploadJSON,
             this._middlewareDepartamento.validar_nome,
             this._middlewareDepartamento.validar_orcamento,

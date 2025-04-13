@@ -14,6 +14,7 @@ module.exports = class RouterFuncionario {
     criarRotasFuncionario () { 
         
         this._router.post ('/' ,
+            this._middlewareFuncionario.validar_autenticacao,
 
             this._middlewareFuncionario.validar_nome,
             this._middlewareFuncionario.validar_email,
@@ -28,6 +29,7 @@ module.exports = class RouterFuncionario {
         )
 
         this._router.put ('/:id' ,
+            this._middlewareFuncionario.validar_autenticacao,
 
             this._middlewareFuncionario.validar_nome,
             this._middlewareFuncionario.validar_email,
@@ -43,17 +45,21 @@ module.exports = class RouterFuncionario {
     
 
         this._router.get('/relatorios/buscar',
+            this._middlewareFuncionario.validar_autenticacao,
+
             this._controleFuncionario.controle_funcionario_dadosRelatorio
         );
         
         this._router.get ('/:id' ,
             
-           // this._middlewareFuncionario.validar_autenticacao,
+             this._middlewareFuncionario.validar_autenticacao,
 
             this._controleFuncionario.controle_funcionario_readPage
         )
 
         this._router.delete ('/:id' ,
+            this._middlewareFuncionario.validar_autenticacao,
+
             this._middlewareFuncionario.validar_funcionario_logado,
 
 
@@ -62,6 +68,8 @@ module.exports = class RouterFuncionario {
 
     
         this._router.post ('/upload' ,
+            this._middlewareFuncionario.validar_autenticacao,
+
             this._middlewareFuncionario.uploadJSON,             
             this._middlewareFuncionario.validar_nome,
             this._middlewareFuncionario.validar_email,

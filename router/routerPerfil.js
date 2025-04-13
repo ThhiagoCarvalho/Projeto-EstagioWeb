@@ -11,14 +11,18 @@ module.exports = class RouterPerfil {
 
     criarRotasPerfil() {
        
-        this._router.post('/',                         
+        this._router.post('/', 
+            this._middlewarePerfil.validar_autenticacao,
+                        
             this._middlewarePerfil.validarIdade,                   
             this._middlewarePerfil.validarTelefone,                                                        
             this._middlewarePerfil.validarCep,        
             this._controlePerfil.controle_perfil_post
         );
         
-        this._router.put('/:id',                         
+        this._router.put('/:id',        
+            this._middlewarePerfil.validar_autenticacao,
+                 
             this._middlewarePerfil.validarIdade,                   
             this._middlewarePerfil.validarTelefone,                                                        
             this._middlewarePerfil.validarCep,        
@@ -28,6 +32,8 @@ module.exports = class RouterPerfil {
         
 
         this._router.get('/:id',
+            this._middlewarePerfil.validar_autenticacao,
+
             this._controlePerfil.controle_perfil_get
         ); 
         return this._router
