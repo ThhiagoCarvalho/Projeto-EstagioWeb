@@ -1,0 +1,70 @@
+database sitema_gestao_funcionarios;
+use  sitema_gestao_funcionarios;
+
+CREATE TABLE funcionarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    cpf VARCHAR(14) UNIQUE NOT NULL,
+    cargo VARCHAR(50) NOT NULL,
+    salario DECIMAL(14,2) NOT NULL,
+    data_contratacao DATE NOT NULL,
+    departamento_id INT,
+  FOREIGN KEY (departamento_id) REFERENCES departamentos(id)
+);
+
+-- Tabela de perfis complementares
+CREATE TABLE perfis (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    funcionario_id INT NOT NULL,
+    idade INT,
+    endereco VARCHAR(255),
+    telefone VARCHAR(20),
+    genero VARCHAR(20),
+    estado_civil VARCHAR(20),
+    FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id) 
+);
+
+-- Tabela de departamentos
+CREATE TABLE departamentos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    orcamento DECIMAL(15,2),
+    localizacao VARCHAR(100),
+    data_criacao DATE NOT NULL
+);
+
+-- Tabela de histórico de cargos
+CREATE TABLE historico_cargos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    funcionario_id INT NOT NULL,
+    cargo_anterior VARCHAR(50),
+    novo_cargo VARCHAR(50) NOT NULL,
+    data_alteracao DATE NOT NULL,
+    FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id) 
+);
+
+
+CREATE TABLE supervisores (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  supervisor_id INT,
+  supervisionado_id INT UNIQUE,
+  FOREIGN KEY (supervisor_id) REFERENCES funcionarios(id),
+  FOREIGN KEY (supervisionado_id) REFERENCES funcionarios(id)
+);
+
+
+DELIMITER //
+
+CREATE TRIGGER trg_registrar_historico_cargo
+AFTER UPDATE ON funcionarios
+FOR EACH ROW
+BEGIN
+  IF NEW.cargo <> OLD.cargo THEN
+    INSERT INTO historico_cargos (funcionario_id, cargo_anterior, novo_cargo, data_alteracao)
+    VALUES (OLD.id, OLD.cargo, NEW.cargo, CURDATE());
+  END IF;
+END;
+//
+
+DELIMITER ;
