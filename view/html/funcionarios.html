@@ -199,12 +199,13 @@
                                                 required>
                                         </div>
                                         <div class="col-md-4 mt-2">
-                                            <input type="date" id="dataContrato" class="form-control"
+                                            <input type="datetime" id="dataContrato" class="form-control"
                                                 placeholder="Contrato" required>
                                         </div>
                                         <div class="col-md-6 mt-2">
-                                            <input type="number" id="departamento_id" class="form-control"
-                                                placeholder="Departamento ID" required>
+                                            <select id="departamento_id" class="form-control" required>
+                                                <option value="">Selecione o Departamento</option>
+                                            </select>
                                         </div>
                                         <div id="error-message" class="text-danger mt-2" style="display: none;">
                                         </div>
@@ -365,7 +366,7 @@
 
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-        
+
                 const uri_get_departamentos = `/departamentos`;
 
                 fetch(uri_get_departamentos, {
@@ -379,14 +380,19 @@
                     return response.json();
                 }).then((data) => {
 
-                const select = document.getElementById('departamento_idPost');
-                data.dados.forEach(dep => {
-                    const option = document.createElement('option');
-                    option.value = dep.id; // ou o nome correto do campo de ID
-                    option.textContent = dep.nome; // ou o nome correto do campo de nome
-                    select.appendChild(option);
-                });
-            })
+                    const select = document.getElementById('departamento_idPost');
+                    const departamento_id = document.getElementById('departamento_id');
+
+                    data.dados.forEach(dep => {
+                        const option = document.createElement('option');
+                        option.value = dep.id; // ou o nome correto do campo de ID
+                        option.textContent = dep.nome; // ou o nome correto do campo de nome
+                        select.appendChild(option);
+
+                        const option2 = option.cloneNode(true); // clona a option
+                        departamento_id.appendChild(option2);
+                    });
+                })
             } catch (error) {
                 console.error("Erro ao carregar departamentos:", error);
             }
@@ -524,7 +530,7 @@
                         document.getElementById("cpf").value = dados_get.cpf;
                         document.getElementById("cargo").value = dados_get.cargo;
                         document.getElementById("salario").value = dados_get.salario;
-                        document.getElementById("dataContrato").value = dados_get.data_contratacao;
+                        document.getElementById("dataContrato").value = formatarData(dados_get.data_contratacao);
                         document.getElementById("departamento_id").value = dados_get.departamento_id;
 
                         // Abre o modal
@@ -543,13 +549,21 @@
 
                     btnVisualizarPeril.onclick = function (event) {
                         event.preventDefault();
-                        fetch(`/perfis/${dados_get.id}`)
+                        console.log(dados_get.id);
+
+                        fetch(`/perfis/${dados_get.id}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                "Authorization": 'Bearer ' + token
+                            }
+                        })
                             .then(res => res.json())
                             .then(data => {
                                 const temPerfil = data && data.status !== false && Array.isArray(data.dados) && data.dados.length > 0;
 
                                 if (temPerfil) {
-                                    const perfil = data.dados[0]
+                                    const perfil = data.dados[0];
                                     document.getElementById("perfil_id").value = perfil.id;
                                     document.getElementById("id").value = perfil.funcionario_id;
 
@@ -562,7 +576,6 @@
                                     btnAtualizarPerfil.style.display = "inline-block";
                                     btnCadastroPerfil.style.display = "none";
                                 } else {
-
                                     // Nenhum perfil encontrado – preparar para cadastrar novo
                                     document.getElementById("perfil_id").value = "";
                                     document.getElementById("id").value = dados_get.id;
@@ -573,8 +586,6 @@
                                     document.getElementById("idade").value = "";
                                     document.getElementById("estado_civil").value = "";
 
-
-                                    // Mostrar botão Cadastrar, esconder os outros
                                     btnAtualizarPerfil.style.display = "none";
                                     btnCadastroPerfil.style.display = "inline-block";
                                 }
@@ -586,8 +597,8 @@
                                 alert("Erro ao buscar perfil.");
                                 console.error(err);
                             });
-
                     }
+
 
                 });
 
@@ -674,6 +685,7 @@
             const genero = document.getElementById('genero').value
             const idade = document.getElementById('idade').value
             const estado_civil = document.getElementById('estado_civil').value
+            
 
             console.log("funcionario_id" + funcionario_id)
             console.log(perfil_id)
