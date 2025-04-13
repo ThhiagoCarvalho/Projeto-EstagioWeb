@@ -75,6 +75,25 @@ header .menu-desktop nav ul {
     border: none;
     border-radius: 8px;
 }
+#spinnerContainer {
+    position: absolute; /* ou fixed, se for overlay na tela toda */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: none;
+    background-color: rgba(255, 255, 255, 0.5); /* opcional: overlay */
+    pointer-events: none; /* <- isso faz ele não bloquear cliques! */
+  }
+
+  .errorMensagge {
+    margin-left: 25px;
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
 
 
 .graficoOcorrencias {
@@ -88,7 +107,7 @@ header .menu-desktop nav ul {
     margin-bottom: 30px;
     transition: transform 0.2s ease;
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
     margin-top: 30px;
     margin-left: auto;
     margin-right: auto;

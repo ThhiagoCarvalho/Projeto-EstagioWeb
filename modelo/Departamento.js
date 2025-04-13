@@ -38,13 +38,11 @@ module.exports = class Departamento {
         }
     }
 
-    async readPage(pagina) {
-        const itensPorPagina = 10;
-        const inicio = (parseInt(pagina) - 1) * itensPorPagina;
+    async readAll(pagina) {
         const conexao = Banco.getConexao()
         const sql = "SELECT * from departamentos";
         try {
-            const [result] = await conexao.promise().execute(sql, [inicio, parseInt(itensPorPagina)])
+            const [result] = await conexao.promise().execute(sql, )
             return result;
         } catch (error) {
             console.log("Errro >>>", error)

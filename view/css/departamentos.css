@@ -382,6 +382,15 @@ button.ativo {
 h2{
     padding-top: 20px;
 }
+
+.errorMensagge {
+    margin-left: 25px;
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+
 #TabelaGetOpcao {
     width: 75%;
     margin: auto;

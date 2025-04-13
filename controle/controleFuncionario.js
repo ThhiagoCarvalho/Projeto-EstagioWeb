@@ -75,7 +75,6 @@ module.exports = class controlFuncionario {
 
 
   async controle_funcionario_post(request, response) {
-    console.log(request.body)
     const nome = request.body.nome;
     const email = request.body.email;
     const cpf = request.body.cpf;
@@ -105,7 +104,6 @@ module.exports = class controlFuncionario {
 
 
   async controle_funcionario_put(request, response) {
-    console.log(request.body)
     const id = request.params.id;
     const nome = request.body.nome;
     const email = request.body.email;
@@ -137,10 +135,8 @@ module.exports = class controlFuncionario {
 
 
   async controle_funcionario_readPage(request, response) {
-    console.log("Entrou porra getid")
 
     const id = parseInt(request.params.id)
-    console.log(id)
     const funcionario = new Funcionario();
     const resultadofuncionario = await funcionario.readPage(id);
 
@@ -174,27 +170,20 @@ module.exports = class controlFuncionario {
   }
 
   async controle_funcionario_dadosRelatorio(req, res) {
-    console.log("Entrou porra controle_funcionario_dadosRelatorio")
     try {
       const funcionario = new Funcionario();
 
       const totalFuncionarios = await funcionario.totalFuncionariosAtivos();
-      console.log("totalFuncionarios:", totalFuncionarios);
 
       const funcionariosCargo = await funcionario.funcionariosPorCargo();
-      console.log("funcionariosCargo:", funcionariosCargo);
 
       const orcamentoTotal = await funcionario.orcamentoTotal();
-      console.log("orcamentoTotal:", orcamentoTotal);
 
       const mediaSalarial = await funcionario.mediaSalarialGeral();
-      console.log("mediaSalarial:", mediaSalarial);
 
       const distribuicaoSalarial = await funcionario.distribuicaoSalarialPorDepartamento();
-      console.log("distribuicaoSalarial:", distribuicaoSalarial);
 
       const idadePorDepartamento = await funcionario.idadeMediaPorDepartamento();
-      console.log("idadePorDepartamento:", idadePorDepartamento);
 
       const objResposta = {
         cod: 7,

@@ -60,6 +60,12 @@ header .menu-desktop nav ul li a {
     height: 100%;
 }
 
+.errorMensagge {
+    margin-left: 25px;
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
 
 /* estilizacao do menu mobile*/
 

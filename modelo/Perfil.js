@@ -36,7 +36,6 @@ module.exports = class Perfis {
     async get_perfil_by_id() {
         const conexao = Banco.getConexao();
         const sql = "SELECT * FROM perfis WHERE funcionario_id = ?";
-        console.log(this._usuario_logado)
         try {
             const [result] = await conexao.promise().execute(sql, [this._usuario_logado]);
 

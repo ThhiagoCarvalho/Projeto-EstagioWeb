@@ -15,11 +15,6 @@ module.exports = class Funcionario {
 
 
   async post_funcionario() {
-    console.log("nome" + this.nome)
-    console.log("email" + this.email)
-    console.log("nome" + this.cpf)
-    console.log("nome" + this.cargo)
-    console.log("nome")
 
     const conexao = Banco.getConexao()
     const sql = "INSERT INTO funcionarios (nome, email, cpf, cargo, salario, data_contratacao, departamento_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -52,7 +47,6 @@ module.exports = class Funcionario {
     const sql = "select * from funcionarios where email = ?"
     try {
       const [result] = await conexao.promise().execute(sql, [this._email])
-      console.log(result)
       if (result.length > 0) {
         return true
       } else {
@@ -69,7 +63,6 @@ module.exports = class Funcionario {
     const sql = "select * from funcionarios where id = ?"
     try {
       const [result] = await conexao.promise().execute(sql, [this.id])
-      console.log(result)
       if (result.length > 0) {
         return true
       } else {
@@ -84,13 +77,10 @@ module.exports = class Funcionario {
 
 
   async verificarDadosAdmin() {
-    console.log(this.email)
-    console.log(this.cpf)
     const conexao = Banco.getConexao()
     const sql = "select count(*) AS qtd,nome,email,cpf,cargo from funcionarios where email = ? and cpf = ? group by nome,email,cpf,cargo"
     try {
       const [result] = await conexao.promise().execute(sql, [this._email, this.cpf])
-      console.log(result)
       if (result.length === 1) {
         const funcionario = result[0];
         return funcionario; // <-- retorna o objeto
@@ -106,9 +96,9 @@ module.exports = class Funcionario {
     const itensPorPagina = 10;
     const inicio = (parseInt(pagina) - 1) * itensPorPagina;
     const conexao = Banco.getConexao()
-    const sql = "SELECT * from funcionarios order by funcionarios.email  ASC";
+    const sql = `SELECT * FROM funcionarios LIMIT ${inicio}, ${itensPorPagina}`;
     try {
-      const [result] = await conexao.promise().execute(sql, [inicio, parseInt(itensPorPagina)])
+      const [result] = await conexao.promise().query(sql);
       return result;
     } catch (error) {
       console.log("Errro >>>", error)

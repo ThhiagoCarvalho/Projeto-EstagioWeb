@@ -1,4 +1,3 @@
-console.log("OI")
 const express = require('express');
 const Departamento = require("../modelo/Departamento");
 const fs = require('fs');
@@ -7,7 +6,6 @@ const multer = require('multer');
 const TokenJWT = require("../modelo/TokenJWT")
 const axios = require('axios');
 const upload = multer({ dest: 'uploads/' }); // Diretório temporário para arquivos
-console.log("OI")
 
 module.exports = class controlDepartamento {
 
@@ -108,7 +106,6 @@ module.exports = class controlDepartamento {
     departamento.localizacao = enderecoCompleto;
     departamento.data_criacao = data_criacao;
 
-    console.log(request.body)
     const departamentoCriado = await departamento.put_departamento();
 
     const objResposta = {
@@ -119,11 +116,10 @@ module.exports = class controlDepartamento {
     response.status(200).send(objResposta);
   }
 
-  async controle_departamento_readPage(request, response) {
-    const id = parseInt(request.params.id);
+  async controle_departamento_read(request, response) {
 
     const departamento = new Departamento();
-    const Resultadodepartamento = await departamento.readPage(id);
+    const Resultadodepartamento = await departamento.readAll();
 
     const objResposta = {
       cod: 1,

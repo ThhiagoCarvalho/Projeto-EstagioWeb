@@ -37,7 +37,6 @@ module.exports = class MeuTokenJWT {
 
 
     validarToken(stringToken) {
-        console.log(stringToken)
         if (!stringToken || stringToken.trim() === "") {
             return false;
         }

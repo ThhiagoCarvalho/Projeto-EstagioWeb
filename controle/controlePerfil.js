@@ -37,7 +37,6 @@ module.exports = class ControlPerfil {
 
     async controle_perfil_get(req, res) {
         const id = req.params.id;
-        console.log(id)
 
         const perfil = new Perfil();
         perfil.idFuncionario = id;

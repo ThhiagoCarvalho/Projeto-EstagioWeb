@@ -225,7 +225,6 @@ module.exports = class MiddlewareFuncionario {
         funcionario.cpf = cpf;
 
         const resultado = await funcionario.verificarDadosAdmin();
-        console.log("Resultado" + resultado)
         if (resultado) {
             req.funcionario = resultado;
             next();
