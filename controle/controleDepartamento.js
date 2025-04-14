@@ -10,7 +10,6 @@ const upload = multer({ dest: 'uploads/' }); // Diretório temporário para arqu
 module.exports = class controlDepartamento {
 
   async controle_csv_departamento(request, response) {
-    console.log("Ntrou")
     try {
       const lista = request.body.departamentos;
       if (!Array.isArray(lista)) {
