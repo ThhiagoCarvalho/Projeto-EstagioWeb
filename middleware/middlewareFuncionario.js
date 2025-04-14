@@ -47,7 +47,6 @@ module.exports = class MiddlewareFuncionario {
         return [body];
     }
     validar_nome = (req, res, next) => {
-        console.log("entrou")
 
         const funcionarios = this.normalizarFuncionarios(req.body);
         for (let i = 0; i < funcionarios.length; i++) {
@@ -94,7 +93,6 @@ module.exports = class MiddlewareFuncionario {
             const objFuncionario = new Funcionario()
             objFuncionario.cpf = cpf
             const existeFuncionario = await objFuncionario.verificarCfp()
-            console.log(existeFuncionario)
             if ( existeFuncionario ) { 
                 return res.status(400).json({
                     cod: 3,
@@ -178,7 +176,6 @@ module.exports = class MiddlewareFuncionario {
             const identificador = funcionarios.length ===  1? "" : `do funcionário ${i + 1}`;
             const departamento = new Departamento();
             departamento.id = depId
-            console.log(depId)
             const resultado = await departamento.verificarExistencia();
 
             if (!resultado || isNaN(depId) || depId <= 0) {

@@ -92,7 +92,6 @@ module.exports = class MiddlewareDepartamento {
             let cep = departamentos[i]?.localizacao?.trim();
             
             if (!cep) {
-                console.log("enmttrou")
                 return res.status(400).json({
                     cod: 3,
                     status: false,
@@ -169,7 +168,6 @@ module.exports = class MiddlewareDepartamento {
         const departamento = new Departamento();
         departamento.id = id;
         const resultado = await departamento.verificarExistencia2();
-        console.log("resultadoaaaaaaaaaaaaaaaaaaaaaaaa")
         if (resultado) {
             next();
         } else {
