@@ -90,8 +90,7 @@ module.exports = class MiddlewareDepartamento {
         for (let i = 0; i < departamentos.length; i++) {
 
             let cep = departamentos[i]?.localizacao?.trim();
-            console.log("enmttrou")
-
+            
             if (!cep) {
                 console.log("enmttrou")
                 return res.status(400).json({
@@ -154,6 +153,23 @@ module.exports = class MiddlewareDepartamento {
         const departamento = new Departamento();
         departamento.id = id;
         const resultado = await departamento.verificarExistencia();
+        if (resultado) {
+            next();
+        } else {
+            return res.status(400).json({
+                cod: 5,
+                msg: "Este departamento não está cadastaaaaaaaaarado!",
+                status: false
+            });
+        }
+    }
+
+    validar_departamento_existente = async (req, res, next) => {
+        const id = req.params.id;
+        const departamento = new Departamento();
+        departamento.id = id;
+        const resultado = await departamento.verificarExistencia2();
+        console.log("resultadoaaaaaaaaaaaaaaaaaaaaaaaa")
         if (resultado) {
             next();
         } else {

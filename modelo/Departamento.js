@@ -83,6 +83,26 @@ module.exports = class Departamento {
     async verificarExistencia() {
         const conexao = Banco.getConexao()
         console.log(this.id)
+        const sql = "select * from departamentos where nome = ?"
+        try {
+            const [result] = await conexao.promise().execute(sql, [this.nome])
+            console.log(result)
+            if (result.length > 0) {
+                return true
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.log("Errro >>>", error)
+            return false
+        }
+    }
+
+
+    
+    async verificarExistencia2() {
+        const conexao = Banco.getConexao()
+        console.log(this.id)
         const sql = "select * from departamentos where id = ?"
         try {
             const [result] = await conexao.promise().execute(sql, [this.id])

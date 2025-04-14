@@ -31,7 +31,7 @@ module.exports = class RouterDepartamento {
             this._middlewareDepartamento.validar_orcamento,
             this._middlewareDepartamento.validar_localizacao,
             this._middlewareDepartamento.validar_data_criacao,
-            this._middlewareDepartamento.validar_departamento_logado,
+            this._middlewareDepartamento.validar_departamento_existente,
 
             this._controleDepartamento.controle_departamento_put
         )
@@ -49,7 +49,7 @@ module.exports = class RouterDepartamento {
 
         this._router.delete ('/:id' ,
             this._middlewareDepartamento.validar_autenticacao,
-            this._middlewareDepartamento.validar_departamento_logado,
+            this._middlewareDepartamento.validar_departamento_existente,
             this._controleDepartamento.controle_departamento_delete
         )
 

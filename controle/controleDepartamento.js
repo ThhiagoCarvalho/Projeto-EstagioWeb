@@ -10,6 +10,7 @@ const upload = multer({ dest: 'uploads/' }); // Diretório temporário para arqu
 module.exports = class controlDepartamento {
 
   async controle_csv_departamento(request, response) {
+    console.log("Ntrou")
     try {
       const lista = request.body.departamentos;
       if (!Array.isArray(lista)) {
@@ -26,8 +27,9 @@ module.exports = class controlDepartamento {
         departamento.localizacao = dados.localizacao;
         departamento.data_criacao = dados.data_criacao;
 
-
+        console.log(dados.nome);
         const existeDepartamento = await departamento.verificarExistencia();
+        console.log(existeDepartamento)
         if (!existeDepartamento) {
           const criado = await departamento.post_departamento();
           if (criado) departamentosCriados.push(departamento);
@@ -36,7 +38,7 @@ module.exports = class controlDepartamento {
         }
 
         return response.status(200).json({
-          message: 'Funcionários processados com sucesso!',
+          message: 'Departamentos processados com sucesso!',
           processados: departamentosCriados.length,
           duplicados: departamentosDuplicados.length,
           nomes_duplicados: departamentosDuplicados

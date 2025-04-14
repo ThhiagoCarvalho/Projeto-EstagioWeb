@@ -137,8 +137,10 @@
                                         <button type="submit" class="btn btn-secondary"
                                             id="CadastroDepartamentoArquivo">Enviar Arquivo</button>
                                     </div>
-                                    <div id="error-message_post_arquivo" class="text-danger" style="display: none;">
-                                    </div>
+                                    <div id="error-message_post_arquivo" class="text-danger" style="display: none;"></div>
+                                    <div id="sucess-message_post_arquivo" class="text-sucess" style="display: none;"></div>
+
+                                    
 
                                 </div>
                             </form>
@@ -259,6 +261,7 @@
 
         const botaoCadastroArquivo = document.getElementById("CadastroDepartamentoArquivo")
         const mensage_error_arquivo = document.getElementById("error-message_post_arquivo");
+        const mensage_sucess_arquivo = document.getElementById("sucess-message_post_arquivo");
 
 
 
@@ -414,7 +417,7 @@
 
 
 
-        /*function deletarDepartamento(id) {
+        function deletarDepartamento(id) {
             const uri_delete_departamentos_arquivo = `/departamentos/${id}`;
 
             fetch(uri_delete_departamentos_arquivo, {
@@ -440,7 +443,7 @@
                 });
 
         }
-                */
+            
         const formUploadArquivo = document.getElementById("formUploadArquivo");
 
         formUploadArquivo.addEventListener("submit", function (e) {
@@ -471,7 +474,6 @@
                 body: formData,
                 headers: {
                         "Accept": "application/json",
-                        "Content-Type": "application/json",
                         "Authorization": 'Bearer ' + token
                     }
             }).then(res => res.json())
@@ -481,8 +483,13 @@
                         mensage_error_arquivo.style.display = "block";
                         return
                     } else {
-                        alert("Arquivo enviado com sucesso!");
-                        location.reload();
+                        mensage_sucess_arquivo.textContent = 
+                            `Departamentos duplicados: ${data.nomes_duplicados || "0"} | ` +
+                                `Duplicados: ${data.duplicados || "0"} | ` +
+                                `Processados: ${data.processados || "0"}`;
+                            console.log(mensage_sucess_arquivo)
+
+                            mensage_sucess_arquivo.style.display = "block";
                     }
                 }).catch(err => {
                     alert("Erro ao enviar arquivo.");
