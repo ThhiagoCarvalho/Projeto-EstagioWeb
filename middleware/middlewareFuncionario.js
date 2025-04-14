@@ -97,9 +97,34 @@ module.exports = class MiddlewareFuncionario {
                 return res.status(400).json({
                     cod: 3,
                     status: false,
-                    msg: `O CPF ${identificador} ja esta usando!`,
+                    msg: `O CPF ${identificador} ja esta usado!`,
                 });
             }
+
+            if ( !cpf || !regexCPF.test(cpf)) {
+                return res.status(400).json({
+                    cod: 3,
+                    status: false,
+                    msg: `O CPF ${identificador} é inválido. Use o formato: 000.000.000-00`,
+                });
+            }
+        }
+        next();
+    }
+
+
+
+    validar_cpf_existente = async (req, res, next) => {
+        const funcionarios = this.normalizarFuncionarios(req.body);
+        const regexCPF = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
+
+        for (let i = 0; i < funcionarios.length; i++) {
+            const { cpf } = funcionarios[i];
+            const identificador = funcionarios.length === 1 ? "" : `do funcionário ${i + 1}`
+            const objFuncionario = new Funcionario()
+            objFuncionario.cpf = cpf
+            const existeFuncionario = await objFuncionario.verificarCfp()
+
 
             if ( !cpf || !regexCPF.test(cpf)) {
                 return res.status(400).json({

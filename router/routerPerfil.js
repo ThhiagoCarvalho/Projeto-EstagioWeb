@@ -33,6 +33,14 @@ module.exports = class RouterPerfil {
 
             this._controlePerfil.controle_perfil_put
         );
+
+        this._router.delete('/:id',        
+            //this._middlewarePerfil.validar_autenticacao,
+    
+
+
+            this._controlePerfil.controle_perfil_delete
+        );
         
 
         this._router.get('/:id',

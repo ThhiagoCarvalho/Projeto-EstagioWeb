@@ -87,6 +87,28 @@ module.exports = class Perfis {
     }
 
 
+
+    async delete_perfil() {
+        const conexao = Banco.getConexao();
+        const sql = `
+            Delete from perfis 
+        
+            WHERE id = ?
+        `;
+
+        try {
+            const [result] = await conexao.promise().execute(sql, [
+                this._id // Corrigido: ID correto do perfil
+            ]);
+
+            return result.affectedRows > 0;
+        } catch (error) {
+            console.log("Erro ao atualizar perfil:", error);
+            return false;
+        }
+    }
+
+
     async validarId(id) {
         const conexao = Banco.getConexao();
 

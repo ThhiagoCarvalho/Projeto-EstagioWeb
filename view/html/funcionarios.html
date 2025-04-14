@@ -258,6 +258,8 @@
                                             id="botaoCadastrarPerfil">Cadastrar</button>
                                         <button type="submit" class="btn btn-primary"
                                             id="botaoAtualizarPerfil">Atualizar</button>
+                                        <button type="submit" class="btn btn-primary"
+                                            id="btnDeletarPerfil">Deletar</button>
                                     </div>
 
                                 </div>
@@ -349,6 +351,8 @@
 
         const btnCadastroPerfil = document.getElementById("botaoCadastrarPerfil")
         const btnAtualizarPerfil = document.getElementById("botaoAtualizarPerfil")
+        const btnDeletarPerfil = document.getElementById("btnDeletarPerfil")
+
 
         const mensage_error_perfilCadastro = document.getElementById("error-message-perfilCadastro");
         const mensage_error_perfil = document.getElementById("error-message-perfil");
@@ -571,6 +575,8 @@
                                     document.getElementById("estado_civil").value = perfil.estado_civil || "";
 
                                     btnAtualizarPerfil.style.display = "inline-block";
+                                    btnDeletarPerfil.style.display = "inline-block";
+
                                     btnCadastroPerfil.style.display = "none";
                                 } else {
                                     // Nenhum perfil encontrado – preparar para cadastrar novo
@@ -616,6 +622,50 @@
             const funcionario_id = document.getElementById("id").value;
             atualizarPerfilFuncionario(funcionario_id);
         });
+
+
+        document.getElementById("btnDeletarPerfil").addEventListener("click", function (event) {
+            event.preventDefault();
+            const funcionario_id = document.getElementById("id").value;
+            DeletarPerfilFuncionario(funcionario_id);
+        });
+
+
+        function DeletarPerfilFuncionario(funcionario_id) {
+            const perfil_id = document.getElementById("perfil_id").value;
+
+            const uri_put_perfil = `/perfis/${perfil_id}`;
+            fetch(uri_put_perfil, {
+                method: "DELETE",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    // "Authorization": 'Bearer ' + token
+                }
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                console.log(data)
+                if (data.status == false) {
+                    let txt = data.msg
+                    mensage_error_perfil.textContent = txt
+                    mensage_error_perfil.style.display = "block";
+                    return;
+                } else {
+                    mensage_error_perfil.style.display = "none";
+
+                    btnDeletarPerfil.textContent = "Deletado!";
+                    btnDeletarPerfil.classList.add("sucesso");
+                    setTimeout(() => {
+                        btnAtualizarPerfil.textContent = "Atualizar";
+                        btnAtualizarPerfil.classList.remove("sucesso");
+                    }, 2000); // 2000 milissegundos = 2 segundos               
+                }
+
+            }).catch((error) => {
+                console.error("Error:", error);
+            })
+        }
 
 
         function cadastroPerfilFuncionario(funcionario_id) {
@@ -798,8 +848,8 @@
                             mensage_error_arquivo.style.display = "block";
                             return;
                         } else {
-                            mensage_sucess_arquivo.textContent = 
-                            `Nomes duplicados: ${data.nomes_duplicados || "0"} | ` +
+                            mensage_sucess_arquivo.textContent =
+                                `Nomes duplicados: ${data.nomes_duplicados || "0"} | ` +
                                 `Duplicados: ${data.duplicados || "0"} | ` +
                                 `Processados: ${data.processados || "0"}`;
                             console.log(mensage_sucess_arquivo)

@@ -80,4 +80,22 @@ module.exports = class ControlPerfil {
 
         res.status(200).send(objResposta);
     }
+
+
+    async controle_perfil_delete(req, res) {
+     
+
+        const perfil = new Perfil();
+
+        perfil.id = req.params.id;
+        const atualizado = await perfil.delete_perfil();
+
+        const objResposta = {
+            cod: 3,
+            status: atualizado,
+            msg: atualizado ? 'Perfil deletado com sucesso' : 'Erro ao deletar Perfil'
+        };
+
+        res.status(200).send(objResposta);
+    }
 }

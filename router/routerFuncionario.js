@@ -86,7 +86,7 @@ module.exports = class RouterFuncionario {
 
         this._router.post ('/login' ,
             this._middlewareFuncionario.validar_email,
-            this._middlewareFuncionario.validar_cpf,
+            this._middlewareFuncionario.validar_cpf_existente,
 
 
             this._middlewareFuncionario.validar_funcionario_administrador,
