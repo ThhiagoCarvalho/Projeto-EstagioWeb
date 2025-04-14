@@ -371,7 +371,10 @@
 
 
                     btnAtualizarDepartamento.textContent = 'Atualizar'; // Definindo o texto do botão
+                    btnAtualizarDepartamento.classList.add('botao-tabela', 'btn-atualizar');
+
                     btnExcluirDepartamento.textContent = 'Excluir'; // Definindo o texto do botão
+                    btnExcluirDepartamento.classList.add('botao-tabela', 'btn-excluir');
 
                     colunaBotaoOpcao.appendChild(btnAtualizarDepartamento);
                     colunaBotaoOpcao.appendChild(btnExcluirDepartamento);

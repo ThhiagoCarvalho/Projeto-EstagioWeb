@@ -158,7 +158,7 @@ module.exports = class MiddlewareDepartamento {
         } else {
             return res.status(400).json({
                 cod: 5,
-                msg: "Este departamento não está cadastaaaaaaaaarado!",
+                msg: "Este departamento não está cadastrado!",
                 status: false
             });
         }

@@ -416,3 +416,26 @@ h2{
     font-weight: bold;
 }
 
+
+
+.botao-tabela {
+    padding: 5px 10px;
+    margin: 0 3px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .btn-excluir {
+    background-color: #d9534f;
+  }
+  
+  .btn-atualizar {
+    background-color: #f0ad4e;
+  }
+  
+  .btn-perfil {
+    background-color: #5bc0de;
+  }

@@ -489,9 +489,16 @@
                     });
 
                     const colunaBotaoOpcao = document.createElement('td'); // Criando uma nova coluna para o botão
+
+
                     const btnExcluirFuncionario = document.createElement('button')
+                    btnExcluirFuncionario.classList.add('botao-tabela', 'btn-excluir');
+
                     const btnAtualizarFuncionario = document.createElement('button')
+                    btnAtualizarFuncionario.classList.add('botao-tabela', 'btn-atualizar');
+
                     const btnVisualizarPeril = document.createElement('button')
+                    btnVisualizarPeril.classList.add('botao-tabela', 'btn-perfil');
 
 
                     btnAtualizarFuncionario.textContent = 'Atualizar'; // Definindo o texto do botão
