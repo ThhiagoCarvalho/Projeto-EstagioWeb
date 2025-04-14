@@ -26,9 +26,7 @@ module.exports = class controlDepartamento {
         departamento.localizacao = dados.localizacao;
         departamento.data_criacao = dados.data_criacao;
 
-        console.log(dados.nome);
         const existeDepartamento = await departamento.verificarExistencia();
-        console.log(existeDepartamento)
         if (!existeDepartamento) {
           const criado = await departamento.post_departamento();
           if (criado) departamentosCriados.push(departamento);
