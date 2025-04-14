@@ -201,7 +201,7 @@ module.exports = class MiddlewareFuncionario {
             const identificador = funcionarios.length ===  1? "" : `do funcionário ${i + 1}`;
             const departamento = new Departamento();
             departamento.id = depId
-            const resultado = await departamento.verificarExistencia();
+            const resultado = await departamento.verificarExistencia2();
 
             if (!resultado || isNaN(depId) || depId <= 0) {
                 return res.status(400).json({
