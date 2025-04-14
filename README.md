@@ -29,7 +29,8 @@ Projeto de uma API em Node.js e Express para gerenciar Departamentos, Funcionár
 
 - `POST /departamentos/` – Cria um novo departamento
 - `PUT /departamentos/:id` – Atualiza um departamento existente
-- `GET /departamentos/:id` – Retorna dados de um departamento
+- `GET /departamentos/:id` – Retorna dados para eu colocar as opcoes de departamento para o usuario escolher
+- `GET /departamentos/buscar/:id` – Retorna dados para a pagincao do crud
 - `DELETE /departamentos/:id` – Remove um departamento
 - `POST /departamentos/upload` – Upload de JSON com dados de departamento
 
@@ -41,9 +42,10 @@ Projeto de uma API em Node.js e Express para gerenciar Departamentos, Funcionár
 
 - `POST /funcionarios/` – Cria um novo funcionário
 - `PUT /funcionarios/:id` – Atualiza dados do funcionário
-- `GET /funcionarios/:id` – Retorna dados do funcionário
+- `GET /funcionarios/:id` – faz a listagem dos funcionarios para o crud
+- `GET /funcionarios/relatorios/buscar` – Retorna dados do funcionário para a montagem dos graficos
 - `DELETE /funcionarios/:id` – Remove funcionário
-- `GET /funcionarios/relatorios/buscar` – Busca relatório de funcionários
+
 - `POST /funcionarios/upload` – Upload de JSON com dados de funcionário
 - `POST /funcionarios/login` – Realiza login do funcionário
 
@@ -55,7 +57,7 @@ Projeto de uma API em Node.js e Express para gerenciar Departamentos, Funcionár
 
 - `POST /perfis/` – Cria um novo perfil
 - `PUT /perfis/:id` – Atualiza um perfil existente
-- `GET /perfis/:id` – Retorna dados do perfil
+- `GET /perfis/:id` – Retorna dados do perfil para buscar de um funcionario
 
 > **Middlewares aplicados**: autenticação, validações de idade, telefone, e CEP.
 
