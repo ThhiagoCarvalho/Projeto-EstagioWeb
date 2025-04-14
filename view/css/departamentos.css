@@ -22,12 +22,12 @@
     position: sticky;
     
     overflow-y: auto; 
-    background-color: #00488B;
+    background-color: #ffa040;
     position: fixed;
     top: 0;
     left: 0;
     height: 100vh;
-    background-color: #00488B;
+    background-color: #ffa040;
     overflow-y: auto;
     z-index: 1000;
 }
@@ -135,7 +135,7 @@ header .menu-desktop nav ul li a {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #00488B;
+    background-color: #ffa040;
     transform: translateY(-100%);
     /* Esconde o menu fora da tela */
     transition: transform 0.5s ease, opacity 0.5s ease;
@@ -168,7 +168,7 @@ header .menu-desktop nav ul li a {
 .menu-mobile nav a:hover {
     list-style-type: none;
     transform: scale(1.05);
-    background-color: #0a5397;
+    background-color: rgba(240, 154, 69, 0.659)
 }
 
 #btn-menu {
@@ -331,7 +331,7 @@ button.ativo {
   .submenu-list {
     display: none;
     flex-direction: column;
-    background-color: #00488B;
+    background-color: #ffa040;
     position: absolute;
     top: 100%;
     font-size: 14px;
@@ -349,7 +349,7 @@ button.ativo {
   }
   
   .submenu-list li a:hover {
-    background-color: #0a5397;
+    background-color: #ffa040;
   }
   
   /* Mostrar submenu quando classe "open" for aplicada */
@@ -360,7 +360,7 @@ button.ativo {
   /* Corrige o submenu no mobile para aparecer direitinho */
   .menu-mobile .submenu-list {
     position: static;
-    background-color: #00488B;
+    background-color: #ffa040;
   }
   
 
