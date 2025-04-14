@@ -47,7 +47,6 @@ module.exports = class MiddlewareFuncionario {
         return [body];
     }
     validar_nome = (req, res, next) => {
-        console.log("entrou")
 
         const funcionarios = this.normalizarFuncionarios(req.body);
         for (let i = 0; i < funcionarios.length; i++) {
