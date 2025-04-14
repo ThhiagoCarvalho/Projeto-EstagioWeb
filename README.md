@@ -16,13 +16,11 @@ Projeto de uma API em Node.js e Express para gerenciar Departamentos, Funcionár
 - **Path** – Manipulação de caminhos de arquivos
 - **JWT (jsonwebtoken)** – Autenticação via token
 
----
+## *Script Mysql -> Docs do projeto**
+
 
 ## Download:
 - **npm install express multer csv-parse axios jsonwebtoken**
-—
-
-## Script Mysql -> Docs do projeto 
 —
 
 ## 🧩 Estrutura de Rotas
