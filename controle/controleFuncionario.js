@@ -139,7 +139,7 @@ module.exports = class controlFuncionario {
     const id = parseInt(request.params.id)
     const funcionario = new Funcionario();
     const resultadofuncionario = await funcionario.readPage(id);
-
+    console.log(resultadofuncionario)
     const objResposta = {
       cod: 1,
       status: true,

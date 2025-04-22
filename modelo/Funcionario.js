@@ -114,9 +114,12 @@ module.exports = class Funcionario {
     const itensPorPagina = 10;
     const inicio = (parseInt(pagina) - 1) * itensPorPagina;
     const conexao = Banco.getConexao()
-    const sql = `SELECT * FROM funcionarios LIMIT ${inicio}, ${itensPorPagina}`;
+    const sql = `SELECT f.id,f.nome,f.email,f.cpf,f.cargo,f.salario,f.data_contratacao ,f.departamento_id, d.nome as departamento FROM funcionarios f
+join  departamentos d on  f.departamento_id = d.id
+limit ${inicio}, ${itensPorPagina}`;
     try {
       const [result] = await conexao.promise().query(sql);
+
       return result;
     } catch (error) {
       console.log("Errro >>>", error)
